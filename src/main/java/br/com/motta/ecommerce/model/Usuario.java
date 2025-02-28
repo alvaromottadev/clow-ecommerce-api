@@ -28,6 +28,9 @@ public class Usuario {
     @Column(name = "saldo", columnDefinition = "Float default 0")
     private Double saldo;
 
+    @OneToOne(mappedBy = "usuario")
+    private Carrinho carrinho;
+
     public Usuario(String username, String login, String password, Double saldo){
 
         this.username = username;

@@ -3,8 +3,11 @@ package br.com.motta.ecommerce.service;
 import br.com.motta.ecommerce.dto.DeleteResponseDTO;
 import br.com.motta.ecommerce.dto.UsuarioResponseDTO;
 import br.com.motta.ecommerce.exception.NotFoundException;
+import br.com.motta.ecommerce.model.Carrinho;
 import br.com.motta.ecommerce.model.Usuario;
+import br.com.motta.ecommerce.repository.CarrinhoRepository;
 import br.com.motta.ecommerce.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private CarrinhoRepository carrinhoRepository;
 
     public ResponseEntity<List<UsuarioResponseDTO>> getAllUsuarios(){
         return ResponseEntity.ok(repository.findAll().stream().map(UsuarioResponseDTO::new).toList());
@@ -34,6 +40,10 @@ public class UsuarioService {
             usuario.setSaldo(0.0);
         }
         repository.save(usuario);
+        Carrinho carrinho = new Carrinho();
+        carrinho.setUsuario(usuario);
+        carrinho.setTotal(0.0);
+        carrinhoRepository.save(carrinho);
         return ResponseEntity.ok(new UsuarioResponseDTO(usuario));
     }
 

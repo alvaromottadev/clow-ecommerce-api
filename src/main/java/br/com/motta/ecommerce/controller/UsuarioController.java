@@ -1,13 +1,14 @@
 package br.com.motta.ecommerce.controller;
 
-import br.com.motta.ecommerce.dto.DeleteResponseDTO;
+import br.com.motta.ecommerce.dto.ResultDTO;
+import br.com.motta.ecommerce.dto.UsuarioAtualizarRequestDTO;
 import br.com.motta.ecommerce.dto.UsuarioRequestDTO;
 import br.com.motta.ecommerce.dto.UsuarioResponseDTO;
 import br.com.motta.ecommerce.model.Usuario;
 import br.com.motta.ecommerce.service.UsuarioService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +36,13 @@ public class UsuarioController {
         return service.registerUsuario(usuarioCriado);
     }
 
+    @PutMapping("/atualizar")
+    public ResponseEntity<ResultDTO> atualizarUsuario(@Validated @RequestBody UsuarioAtualizarRequestDTO data){
+        return service.atualizarUsuario(data);
+    }
+
     @DeleteMapping("/deletar/{login}")
-    public ResponseEntity<DeleteResponseDTO> deletarUsuario(@PathVariable String login){
+    public ResponseEntity<ResultDTO> deletarUsuario(@PathVariable String login){
         return service.deletarUsuario(login);
     }
 

@@ -37,7 +37,7 @@ public class Produto {
     @Column(name = "desconto")
     private Double desconto;
 
-    @OneToMany(mappedBy = "produto", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "produto", fetch = FetchType.LAZY)
     private List<ItemCarrinho> itensCarrinho;
 
     public Produto(String nome, String descricao, List<String> imagemUrl, Double preco, Double desconto){

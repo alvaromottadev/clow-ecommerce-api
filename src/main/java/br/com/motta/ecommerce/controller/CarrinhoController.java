@@ -1,7 +1,8 @@
 package br.com.motta.ecommerce.controller;
 
 import br.com.motta.ecommerce.dto.CarrinhoRequestDTO;
-import br.com.motta.ecommerce.model.Produto;
+import br.com.motta.ecommerce.dto.CarrinhoResponseDTO;
+import br.com.motta.ecommerce.dto.ResultDTO;
 import br.com.motta.ecommerce.service.CarrinhoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,22 @@ public class CarrinhoController {
     private CarrinhoService service;
 
     @GetMapping("/{login}")
-    public ResponseEntity<?> getCarrinho(@PathVariable String login){
+    public ResponseEntity<CarrinhoResponseDTO> getCarrinho(@PathVariable String login){
         return service.getCarrinho(login);
     }
 
     @PostMapping("/adicionar/{apelido}")
-    public ResponseEntity<?> addProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho, @PathVariable String apelido){
+    public ResponseEntity<CarrinhoResponseDTO> addProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho, @PathVariable String apelido){
         return service.addProduto(carrinho.login(), apelido);
     }
 
+    @DeleteMapping("/deletar/{apelido}")
+    public ResponseEntity<ResultDTO> deletarProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho, @PathVariable String apelido){
+        return service.deletarProdutoCarrinho(carrinho.login(), apelido);
+    }
+
+    @DeleteMapping("/remover/{apelido}")
+    public ResponseEntity<ResultDTO> removerProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho, @PathVariable String apelido){
+        return service.removerProduto(carrinho.login(), apelido);
+    }
 }

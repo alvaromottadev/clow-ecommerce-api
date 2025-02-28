@@ -1,18 +1,20 @@
 package br.com.motta.ecommerce.service;
 
-import br.com.motta.ecommerce.dto.DeleteResponseDTO;
+import br.com.motta.ecommerce.dto.ResultDTO;
+import br.com.motta.ecommerce.dto.UsuarioAtualizarRequestDTO;
 import br.com.motta.ecommerce.dto.UsuarioResponseDTO;
 import br.com.motta.ecommerce.exception.NotFoundException;
 import br.com.motta.ecommerce.model.Carrinho;
 import br.com.motta.ecommerce.model.Usuario;
 import br.com.motta.ecommerce.repository.CarrinhoRepository;
 import br.com.motta.ecommerce.repository.UsuarioRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Result;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -44,16 +46,33 @@ public class UsuarioService {
         carrinho.setUsuario(usuario);
         carrinho.setTotal(0.0);
         carrinhoRepository.save(carrinho);
-        return ResponseEntity.ok(new UsuarioResponseDTO(usuario));
+        return ResponseEntity.status(201).body(new UsuarioResponseDTO(usuario));
     }
 
-    public ResponseEntity<DeleteResponseDTO> deletarUsuario(String login){
+    public ResponseEntity<ResultDTO> atualizarUsuario(UsuarioAtualizarRequestDTO data){
+        Optional<Usuario> usuario = repository.findById(data.id());
+        if (!usuario.isPresent()){
+            throw new NotFoundException("Usuário não encontrado.");
+        }
+        updateUsuario(usuario.get(), data);
+        return ResponseEntity.ok(new ResultDTO("Usuário atualizado com sucesso."));
+    }
+
+    public ResponseEntity<ResultDTO> deletarUsuario(String login){
         Usuario usuario = repository.findByLogin(login);
         if (usuario == null){
             throw new NotFoundException("O usuário não foi encontrado.");
         }
         repository.delete(usuario);
-        return ResponseEntity.ok(new DeleteResponseDTO("O usuário foi removido com sucesso."));
+        return ResponseEntity.ok(new ResultDTO("O usuário foi removido com sucesso."));
+    }
+
+    private void updateUsuario(Usuario usuario, UsuarioAtualizarRequestDTO data){
+        usuario.setUsername(data.username());
+        usuario.setLogin(data.login());
+        usuario.setPassword(data.password());
+
+        repository.save(usuario);
     }
 
 }

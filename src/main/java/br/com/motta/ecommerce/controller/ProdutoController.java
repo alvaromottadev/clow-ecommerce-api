@@ -1,6 +1,7 @@
 package br.com.motta.ecommerce.controller;
 
-import br.com.motta.ecommerce.dto.DeleteResponseDTO;
+import br.com.motta.ecommerce.dto.ResultDTO;
+import br.com.motta.ecommerce.dto.ProdutoAtualizarRequestDTO;
 import br.com.motta.ecommerce.dto.ProdutoRequestDTO;
 import br.com.motta.ecommerce.dto.ProdutoResponseDTO;
 import br.com.motta.ecommerce.model.Produto;
@@ -35,8 +36,13 @@ public class ProdutoController {
         return service.cadastrarProduto(produtoCriado);
     }
 
+    @PutMapping("/atualizar")
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@Validated @RequestBody ProdutoAtualizarRequestDTO data){
+        return service.atualizarProduto(data);
+    }
+
     @DeleteMapping("/deletar/{apelido}")
-    public ResponseEntity<DeleteResponseDTO> deletarProduto(@PathVariable String apelido){
+    public ResponseEntity<ResultDTO> deletarProduto(@PathVariable String apelido){
         return service.deletarProduto(apelido);
     }
 

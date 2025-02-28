@@ -32,8 +32,4 @@ public class Carrinho {
         itensCarrinho.add(item);
     }
 
-    public Carrinho(Usuario usuario){
-        this.usuario = usuario;
-    }
-
 }

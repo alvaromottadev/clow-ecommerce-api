@@ -21,18 +21,24 @@ public class CarrinhoController {
         return service.getCarrinho(login);
     }
 
-    @PostMapping("/adicionar/{apelido}")
-    public ResponseEntity<CarrinhoResponseDTO> addProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho, @PathVariable String apelido){
-        return service.addProduto(carrinho.login(), apelido);
+    @PostMapping("/adicionar/{apelido}/{tamanho}")
+    public ResponseEntity<CarrinhoResponseDTO> addProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho,
+                                                          @PathVariable String apelido,
+                                                          @PathVariable String tamanho){
+        return service.addProduto(carrinho.login(), apelido, tamanho);
     }
 
-    @DeleteMapping("/deletar/{apelido}")
-    public ResponseEntity<ResultDTO> deletarProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho, @PathVariable String apelido){
-        return service.deletarProdutoCarrinho(carrinho.login(), apelido);
+    @DeleteMapping("/deletar/{apelido}/{tamanho}")
+    public ResponseEntity<ResultDTO> deletarProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho,
+                                                    @PathVariable String apelido,
+                                                    @PathVariable String tamanho){
+        return service.deletarProdutoCarrinho(carrinho.login(), apelido, tamanho);
     }
 
-    @DeleteMapping("/remover/{apelido}")
-    public ResponseEntity<ResultDTO> removerProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho, @PathVariable String apelido){
-        return service.removerProduto(carrinho.login(), apelido);
+    @DeleteMapping("/remover/{apelido}/{tamanho}")
+    public ResponseEntity<ResultDTO> removerProduto(@Validated @RequestBody CarrinhoRequestDTO carrinho,
+                                                    @PathVariable String apelido,
+                                                    @PathVariable String tamanho){
+        return service.removerProduto(carrinho.login(), apelido, tamanho);
     }
 }

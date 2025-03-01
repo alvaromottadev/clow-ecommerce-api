@@ -12,6 +12,12 @@ public record ProdutoRequestDTO(
         @NotNull(message = "O parâmetro descrição não pode está null.")
         String descricao,
 
+        @NotNull(message = "O parâmetro tamanhos não pode está null.")
+        List<String> tamanhos,
+
+        @NotNull(message = "O parâmetro categoria não pode está null.")
+        String categoria,
+
         List<String> imagemUrl,
 
         @NotNull(message = "O parâmetro preço não pode está null.")

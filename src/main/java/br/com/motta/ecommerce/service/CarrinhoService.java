@@ -35,7 +35,7 @@ public class CarrinhoService {
         return ResponseEntity.ok(new CarrinhoResponseDTO(carrinho));
     }
 
-    public ResponseEntity<CarrinhoResponseDTO> addProduto(String login, String apelido) {
+    public ResponseEntity<CarrinhoResponseDTO> addProduto(String login, String apelido, String tamanho) {
 
         Carrinho carrinho = repository.findByUsuarioLogin(login);
         if (carrinho == null) {
@@ -47,14 +47,18 @@ public class CarrinhoService {
             throw new NotFoundException("Produto não encontrado.");
         }
 
-        adicionarProduto(carrinho, produto);
+        if (!produto.getTamanhos().contains(tamanho)){
+            throw new NotFoundException("Tamanho não disponível.");
+        }
+
+        adicionarProduto(carrinho, produto, tamanho);
 
         repository.save(carrinho);
         return ResponseEntity.ok(new CarrinhoResponseDTO(carrinho));
 
     }
 
-    public ResponseEntity<ResultDTO> deletarProdutoCarrinho(String login, String apelido) {
+    public ResponseEntity<ResultDTO> deletarProdutoCarrinho(String login, String apelido, String tamanho) {
         Carrinho carrinho = repository.findByUsuarioLogin(login);
         if (carrinho == null) {
             throw new NotFoundException("Carrinho não encontrado.");
@@ -65,7 +69,7 @@ public class CarrinhoService {
             throw new NotFoundException("Produto não encontrado.");
         }
 
-        if (deletarProduto(carrinho, produto)){
+        if (deletarProduto(carrinho, produto, tamanho)){
             Double preco = produto.getPreco();
             Double desconto = produto.getDesconto();
             Double total = carrinho.getTotal();
@@ -76,7 +80,7 @@ public class CarrinhoService {
         return ResponseEntity.badRequest().body(new ResultDTO("Produto não encontrado no carrinho."));
     }
 
-    public ResponseEntity<ResultDTO> removerProduto(String login, String apelido){
+    public ResponseEntity<ResultDTO> removerProduto(String login, String apelido, String tamanho){
 
         Carrinho carrinho = repository.findByUsuarioLogin(login);
         if (carrinho == null) {
@@ -88,7 +92,7 @@ public class CarrinhoService {
             throw new NotFoundException("Produto não encontrado.");
         }
 
-        if (removerProduto(carrinho, produto)) {
+        if (removerProduto(carrinho, produto, tamanho)) {
             Double preco = produto.getPreco();
             Double desconto = produto.getDesconto();
             Double total = carrinho.getTotal();
@@ -100,21 +104,21 @@ public class CarrinhoService {
 
     }
 
-    private void adicionarProduto(Carrinho carrinho, Produto produto) {
-        Optional<ItemCarrinho> item = carrinho.getItensCarrinho().stream().filter(i -> i.getProduto().equals(produto)).findFirst();
-        if (item.isPresent()) {
-            ItemCarrinho itemCarrinho = item.get();
-            itemCarrinho.setQuantidade(item.get().getQuantidade() + 1);
-            return;
+    private void adicionarProduto(Carrinho carrinho, Produto produto, String tamanho) {
+        ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId());
+        if (itemCarrinho != null) {
+            if (itemCarrinho.getTamanho().equals(tamanho)) {
+                itemCarrinho.setQuantidade(itemCarrinho.getQuantidade() + 1);
+                return;
+            }
         }
-        ItemCarrinho itemCarrinho = new ItemCarrinho(carrinho, produto, 1);
-        carrinho.addItem(itemCarrinho);
+        ItemCarrinho itemCarrinhoCriado = new ItemCarrinho(carrinho, produto, 1, tamanho);
+        carrinho.addItem(itemCarrinhoCriado);
     }
 
-    private boolean deletarProduto(Carrinho carrinho, Produto produto) {
-        Optional<ItemCarrinho> item = carrinho.getItensCarrinho().stream().filter(i -> i.getProduto().equals(produto)).findFirst();
-        if (item.isPresent()){
-            ItemCarrinho itemCarrinho = item.get();
+    private boolean deletarProduto(Carrinho carrinho, Produto produto, String tamanho) {
+        ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId());
+        if (itemCarrinho != null){
             carrinho.getItensCarrinho().remove(itemCarrinho);
             itemCarrinhoRepository.delete(itemCarrinho);
             return true;
@@ -122,7 +126,7 @@ public class CarrinhoService {
         return false;
     }
 
-    private boolean removerProduto(Carrinho carrinho, Produto produto){
+    private boolean removerProduto(Carrinho carrinho, Produto produto, String tamanho){
         Optional<ItemCarrinho> item = carrinho.getItensCarrinho().stream().filter(i -> i.getProduto().equals(produto)).findFirst();
         if (item.isPresent()){
             ItemCarrinho itemCarrinho = item.get();
@@ -130,7 +134,7 @@ public class CarrinhoService {
                 itemCarrinho.setQuantidade(itemCarrinho.getQuantidade() - 1);
                 return true;
             }
-            deletarProduto(carrinho, produto);
+            deletarProduto(carrinho, produto, tamanho);
             return true;
         }
         return false;

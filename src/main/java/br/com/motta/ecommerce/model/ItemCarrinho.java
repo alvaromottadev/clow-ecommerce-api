@@ -29,11 +29,14 @@ public class ItemCarrinho {
 
     private Integer quantidade;
 
-    public ItemCarrinho(Carrinho carrinho, Produto produto, Integer quantidade){
+    private String tamanho;
+
+    public ItemCarrinho(Carrinho carrinho, Produto produto, Integer quantidade, String tamanho){
 
         this.carrinho = carrinho;
         this.produto = produto;
         this.quantidade = quantidade;
+        this.tamanho = tamanho;
 
     }
 

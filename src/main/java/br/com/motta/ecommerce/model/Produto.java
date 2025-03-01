@@ -28,6 +28,12 @@ public class Produto {
     @Column(name = "descricao")
     private String descricao;
 
+    @Column(name = "tamanhos")
+    private List<String> tamanhos;
+
+    @Column(name = "categoria")
+    private String categoria;
+
     @Column(name = "imagem")
     private List<String> imagemUrl;
 
@@ -40,10 +46,12 @@ public class Produto {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "produto", fetch = FetchType.LAZY)
     private List<ItemCarrinho> itensCarrinho;
 
-    public Produto(String nome, String descricao, List<String> imagemUrl, Double preco, Double desconto){
+    public Produto(String nome, String descricao, List<String> tamanhos, String categoria, List<String> imagemUrl, Double preco, Double desconto){
 
         this.nome = nome;
         this.descricao = descricao;
+        this.tamanhos = tamanhos;
+        this.categoria = categoria;
         this.imagemUrl = imagemUrl;
         this.preco = preco;
         this.desconto = desconto;

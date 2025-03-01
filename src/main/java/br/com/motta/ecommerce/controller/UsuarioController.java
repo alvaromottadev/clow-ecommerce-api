@@ -31,7 +31,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UsuarioResponseDTO> registerUsuario(@RequestBody UsuarioRequestDTO usuario){
+    public ResponseEntity<UsuarioResponseDTO> registerUsuario(@Validated @RequestBody UsuarioRequestDTO usuario){
         Usuario usuarioCriado = new Usuario(usuario.username(), usuario.login(), usuario.password(), usuario.saldo());
         return service.registerUsuario(usuarioCriado);
     }

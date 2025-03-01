@@ -31,4 +31,9 @@ public class ExceptionGlobalHandler {
         return new ResponseEntity<>(new ErrorMessage("Já existe um usuário com esse email."), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(EmptyException.class)
+    public ResponseEntity<?> handleEmptyException(EmptyException exception){
+        return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 }

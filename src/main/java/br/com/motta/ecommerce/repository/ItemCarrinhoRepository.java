@@ -9,6 +9,4 @@ public interface ItemCarrinhoRepository extends JpaRepository<ItemCarrinho, Long
 
     ItemCarrinho findByProdutoId(String produtoId);
 
-    List<ItemCarrinho> findAllByProdutoId(String produtoId);
-
 }

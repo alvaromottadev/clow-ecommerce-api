@@ -49,11 +49,6 @@ public class CarrinhoService {
 
         adicionarProduto(carrinho, produto);
 
-        Double preco = produto.getPreco();
-        Double desconto = produto.getDesconto();
-        Double total = carrinho.getTotal();
-        carrinho.setTotal(total + (preco * (1 - desconto)));
-
         repository.save(carrinho);
         return ResponseEntity.ok(new CarrinhoResponseDTO(carrinho));
 

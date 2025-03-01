@@ -1,7 +1,6 @@
 package br.com.motta.ecommerce.dto;
 
 import br.com.motta.ecommerce.model.ItemCarrinho;
-import br.com.motta.ecommerce.model.Produto;
 
 import java.util.List;
 

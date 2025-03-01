@@ -24,6 +24,9 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
 
+    @Autowired
+    private CarrinhoRepository carrinhoRepository;
+
     public ResponseEntity<List<ProdutoResponseDTO>> getAllProdutos() {
         return ResponseEntity.ok(repository.findAll().stream().map(ProdutoResponseDTO::new).toList());
     }
@@ -59,12 +62,16 @@ public class ProdutoService {
     }
 
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(ProdutoAtualizarRequestDTO data) {
-        Optional<Produto> produto = repository.findById(data.id());
-        if (!produto.isPresent()) {
-            throw new NotFoundException("Produto não encontrado.");
+        Produto produto = repository.findById(data.id()).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+
+        List<Carrinho> carrinhos = carrinhoRepository.findAllByItensCarrinhoProdutoId(produto.getId());
+        Double valorAntigo = produto.getPreco() * (1 - produto.getDesconto());
+        Double valorNovo = data.preco() * (1 - data.desconto());
+        for (Carrinho carrinho : carrinhos){
+            carrinho.updateTotal(produto.getId(), valorAntigo, valorNovo);
         }
-        updateProduto(produto.get(), data);
-        return ResponseEntity.ok(new ProdutoResponseDTO(produto.get()));
+        updateProduto(produto, data);
+        return ResponseEntity.ok(new ProdutoResponseDTO(produto));
     }
 
     public ResponseEntity<ResultDTO> deletarProduto(String apelido) {

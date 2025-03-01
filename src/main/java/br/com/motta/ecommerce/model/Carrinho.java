@@ -28,24 +28,31 @@ public class Carrinho {
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemCarrinho> itensCarrinho;
 
-    public void addItem(ItemCarrinho item){
+    public void addItem(ItemCarrinho item) {
         total += item.getProduto().getPreco() * (1 - item.getProduto().getDesconto());
         itensCarrinho.add(item);
     }
 
-    public void addTotal(Double valor, Double desconto){
+    public void addTotal(Double valor, Double desconto) {
         total += valor * (1 - desconto);
     }
 
-    public void removeTotal(Integer quantidade, Double valor, Double desconto){
+    public void removeTotal(Integer quantidade, Double valor, Double desconto) {
         total -= (quantidade - 1) * (valor * (1 - desconto));
     }
 
-//    public Double getTotal(){
-//        for (ItemCarrinho itemCarrinho : itensCarrinho){
-//            total += itemCarrinho.getProduto().getPreco() * (1 - itemCarrinho.getProduto().getDesconto());
-//        }
-//        return total;
-//    }
+    public void updateTotal(String produtoId, Double valorAntigo, Double valorNovo) {
+        int quantidade = 0;
+        for (ItemCarrinho item : itensCarrinho) {
+            if (item.getProduto().getId().equals(produtoId)) {
+                quantidade++;
+            }
+        }
+        Double carrinhoAntes = quantidade * valorAntigo;
+        Double carrinhoDepois = quantidade * valorNovo;
+        Double diferenca = carrinhoAntes - carrinhoDepois;
+        setTotal(getTotal() - diferenca);
+
+    }
 
 }

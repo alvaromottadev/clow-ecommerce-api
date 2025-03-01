@@ -9,4 +9,6 @@ public interface CarrinhoRepository extends JpaRepository<Carrinho, String> {
 
     Carrinho findByUsuarioLogin(String login);
 
+    List<Carrinho> findAllByItensCarrinhoProdutoId(String produtoId);
+
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -28,9 +28,6 @@ public class Produto {
     @Column(name = "descricao")
     private String descricao;
 
-    @Column(name = "tamanhos")
-    private List<String> tamanhos;
-
     @Column(name = "categoria")
     private String categoria;
 
@@ -43,14 +40,20 @@ public class Produto {
     @Column(name = "desconto")
     private Double desconto;
 
+    @OneToMany(mappedBy = "produtoEstoque", cascade = CascadeType.ALL)
+    private List<Estoque> estoques = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "produto", fetch = FetchType.LAZY)
     private List<ItemCarrinho> itensCarrinho;
 
-    public Produto(String nome, String descricao, List<String> tamanhos, String categoria, List<String> imagemUrl, Double preco, Double desconto){
+    public void addEstoque(Estoque estoque){
+        estoques.add(estoque);
+    }
+
+    public Produto(String nome, String descricao, String categoria, List<String> imagemUrl, Double preco, Double desconto){
 
         this.nome = nome;
         this.descricao = descricao;
-        this.tamanhos = tamanhos;
         this.categoria = categoria;
         this.imagemUrl = imagemUrl;
         this.preco = preco;

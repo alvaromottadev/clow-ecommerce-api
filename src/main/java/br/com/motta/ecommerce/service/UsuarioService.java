@@ -50,11 +50,8 @@ public class UsuarioService {
     }
 
     public ResponseEntity<ResultDTO> atualizarUsuario(UsuarioAtualizarRequestDTO data){
-        Optional<Usuario> usuario = repository.findById(data.id());
-        if (!usuario.isPresent()){
-            throw new NotFoundException("Usuário não encontrado.");
-        }
-        updateUsuario(usuario.get(), data);
+        Usuario usuario = repository.findById(data.id()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+        updateUsuario(usuario, data);
         return ResponseEntity.ok(new ResultDTO("Usuário atualizado com sucesso."));
     }
 

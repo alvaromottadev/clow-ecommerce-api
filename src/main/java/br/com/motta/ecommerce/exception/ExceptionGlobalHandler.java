@@ -36,4 +36,9 @@ public class ExceptionGlobalHandler {
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NoStockException.class)
+    public ResponseEntity<?> handleNoStockException(NoStockException exception){
+        return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 }

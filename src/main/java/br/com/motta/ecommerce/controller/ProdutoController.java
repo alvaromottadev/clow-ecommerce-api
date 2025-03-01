@@ -31,9 +31,8 @@ public class ProdutoController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<ProdutoResponseDTO> cadastrarProduto(@Validated @RequestBody ProdutoRequestDTO produto) {
-        Produto produtoCriado = new Produto(produto.nome(), produto.descricao(), produto.tamanhos(), produto.categoria(), produto.imagemUrl(), produto.preco(), produto.desconto());
-        return service.cadastrarProduto(produtoCriado);
+    public ResponseEntity<ProdutoResponseDTO> cadastrarProduto(@Validated @RequestBody ProdutoRequestDTO data) {
+        return service.cadastrarProduto(data);
     }
 
     @PutMapping("/atualizar")

@@ -1,15 +1,9 @@
 package br.com.motta.ecommerce.service;
 
-import br.com.motta.ecommerce.dto.ResultDTO;
-import br.com.motta.ecommerce.dto.ProdutoAtualizarRequestDTO;
-import br.com.motta.ecommerce.dto.ProdutoResponseDTO;
+import br.com.motta.ecommerce.dto.*;
 import br.com.motta.ecommerce.exception.NotFoundException;
-import br.com.motta.ecommerce.model.Carrinho;
-import br.com.motta.ecommerce.model.ItemCarrinho;
-import br.com.motta.ecommerce.model.Produto;
-import br.com.motta.ecommerce.repository.CarrinhoRepository;
-import br.com.motta.ecommerce.repository.ItemCarrinhoRepository;
-import br.com.motta.ecommerce.repository.ProdutoRepository;
+import br.com.motta.ecommerce.model.*;
+import br.com.motta.ecommerce.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +21,9 @@ public class ProdutoService {
     @Autowired
     private CarrinhoRepository carrinhoRepository;
 
+    @Autowired
+    private ItemEstoqueRepository itemEstoqueRepository;
+
     public ResponseEntity<List<ProdutoResponseDTO>> getAllProdutos() {
         return ResponseEntity.ok(repository.findAll().stream().map(ProdutoResponseDTO::new).toList());
     }
@@ -39,14 +36,23 @@ public class ProdutoService {
         return ResponseEntity.ok(new ProdutoResponseDTO(produto));
     }
 
-    public ResponseEntity<ProdutoResponseDTO> cadastrarProduto(Produto produto) {
-        String apelido = produto.getNome()
+    public ResponseEntity<ProdutoResponseDTO> cadastrarProduto(ProdutoRequestDTO data) {
+        Produto produtoCriado = new Produto(data.nome(), data.descricao(), data.categoria(), data.imagemUrl(), data.preco(), data.desconto());
+        String apelido = produtoCriado.getNome()
                 .toLowerCase()
                 .replace(" ", "-");
         Produto produtoEncontrado = repository.findByApelido(apelido);
 
-        if (produto.getDesconto() == null) {
-            produto.setDesconto(0.0);
+        if (produtoCriado.getDesconto() == null) {
+            produtoCriado.setDesconto(0.0);
+        }
+
+        for (EstoqueRequestDTO produto : data.estoques()){
+            Estoque estoque = new Estoque();
+            estoque.setTamanho(produto.tamanho());
+            estoque.setQuantidade(produto.quantidade());
+            estoque.setProdutoEstoque(produtoCriado);
+            produtoCriado.addEstoque(estoque);
         }
 
         //Verificar se o apelido já existe
@@ -57,11 +63,13 @@ public class ProdutoService {
             produtoEncontrado = repository.findByApelido(apelido);
         }
 
-        produto.setApelido(apelido);
-        return ResponseEntity.status(201).body(new ProdutoResponseDTO(repository.save(produto)));
+        produtoCriado.setApelido(apelido);
+
+        return ResponseEntity.status(201).body(new ProdutoResponseDTO(repository.save(produtoCriado)));
     }
 
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(ProdutoAtualizarRequestDTO data) {
+
         Produto produto = repository.findById(data.id()).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
 
         List<Carrinho> carrinhos = carrinhoRepository.findAllByItensCarrinhoProdutoId(produto.getId());

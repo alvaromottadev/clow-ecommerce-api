@@ -2,11 +2,14 @@ package br.com.motta.ecommerce.service;
 
 import br.com.motta.ecommerce.dto.CarrinhoResponseDTO;
 import br.com.motta.ecommerce.dto.ResultDTO;
+import br.com.motta.ecommerce.exception.NoStockException;
 import br.com.motta.ecommerce.exception.NotFoundException;
 import br.com.motta.ecommerce.model.Carrinho;
+import br.com.motta.ecommerce.model.Estoque;
 import br.com.motta.ecommerce.model.ItemCarrinho;
 import br.com.motta.ecommerce.model.Produto;
 import br.com.motta.ecommerce.repository.CarrinhoRepository;
+import br.com.motta.ecommerce.repository.EstoqueRepository;
 import br.com.motta.ecommerce.repository.ItemCarrinhoRepository;
 import br.com.motta.ecommerce.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class CarrinhoService {
 
     @Autowired
     private ItemCarrinhoRepository itemCarrinhoRepository;
+
+    @Autowired
+    private EstoqueRepository estoqueRepository;
 
     public ResponseEntity<CarrinhoResponseDTO> getCarrinho(String login) {
         Carrinho carrinho = repository.findByUsuarioLogin(login);
@@ -47,8 +53,14 @@ public class CarrinhoService {
             throw new NotFoundException("Produto não encontrado.");
         }
 
-        if (!produto.getTamanhos().contains(tamanho)){
-            throw new NotFoundException("Tamanho não disponível.");
+        Estoque estoque = estoqueRepository.findByTamanhoAndProdutoEstoqueId(tamanho, produto.getId());
+
+        if (estoque == null){
+            throw new NotFoundException("Tamanho não encontrado.");
+        }
+
+        if (estoque.getQuantidade() <= 0){
+            throw new NoStockException("Estoque indisponível.");
         }
 
         adicionarProduto(carrinho, produto, tamanho);

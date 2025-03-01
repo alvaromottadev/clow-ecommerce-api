@@ -1,5 +1,7 @@
 package br.com.motta.ecommerce.dto;
 
+import br.com.motta.ecommerce.model.Estoque;
+import br.com.motta.ecommerce.model.ItemEstoque;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -12,11 +14,11 @@ public record ProdutoRequestDTO(
         @NotNull(message = "O parâmetro descrição não pode está null.")
         String descricao,
 
-        @NotNull(message = "O parâmetro tamanhos não pode está null.")
-        List<String> tamanhos,
-
         @NotNull(message = "O parâmetro categoria não pode está null.")
         String categoria,
+
+        @NotNull
+        List<EstoqueRequestDTO> estoques,
 
         List<String> imagemUrl,
 

@@ -21,9 +21,6 @@ public class ProdutoService {
     @Autowired
     private CarrinhoRepository carrinhoRepository;
 
-    @Autowired
-    private ItemEstoqueRepository itemEstoqueRepository;
-
     public ResponseEntity<List<ProdutoResponseDTO>> getAllProdutos() {
         return ResponseEntity.ok(repository.findAll().stream().map(ProdutoResponseDTO::new).toList());
     }

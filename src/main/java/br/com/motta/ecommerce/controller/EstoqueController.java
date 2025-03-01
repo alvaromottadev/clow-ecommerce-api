@@ -1,7 +1,10 @@
 package br.com.motta.ecommerce.controller;
 
+import br.com.motta.ecommerce.dto.EstoqueAtualizadoResponseDTO;
+import br.com.motta.ecommerce.dto.EstoqueResponseDTO;
 import br.com.motta.ecommerce.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,17 +18,17 @@ public class EstoqueController {
     private EstoqueService service;
 
     @PostMapping("/adicionar/{id}/{tamanho}/{quantidade}")
-    public void adicionarEstoque(@PathVariable String id,
-                                 @PathVariable String tamanho,
-                                 @PathVariable Integer quantidade){
-        service.adicionarEstoque(id, tamanho, quantidade);
+    public ResponseEntity<EstoqueAtualizadoResponseDTO> adicionarEstoque(@PathVariable String id,
+                                                                         @PathVariable String tamanho,
+                                                                         @PathVariable Integer quantidade){
+        return service.adicionarEstoque(id, tamanho, quantidade);
     }
 
     @PostMapping("/remover/{id}/{tamanho}/{quantidade}")
-    public void removerEstoque(@PathVariable String id,
+    public ResponseEntity<EstoqueAtualizadoResponseDTO> removerEstoque(@PathVariable String id,
                                @PathVariable String tamanho,
                                @PathVariable Integer quantidade){
-        service.removerEstoque(id, tamanho, quantidade);
+        return service.removerEstoque(id, tamanho, quantidade);
     }
 
 }

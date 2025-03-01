@@ -1,7 +1,5 @@
 package br.com.motta.ecommerce.dto;
 
-import br.com.motta.ecommerce.model.Estoque;
-import br.com.motta.ecommerce.model.ItemEstoque;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;

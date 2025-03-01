@@ -29,14 +29,23 @@ public class Carrinho {
     private List<ItemCarrinho> itensCarrinho;
 
     public void addItem(ItemCarrinho item){
+        total += item.getProduto().getPreco() * (1 - item.getProduto().getDesconto());
         itensCarrinho.add(item);
     }
 
-    public Double getTotal(){
-        for (ItemCarrinho itemCarrinho : itensCarrinho){
-            total += itemCarrinho.getProduto().getPreco() * (1 - itemCarrinho.getProduto().getDesconto());
-        }
-        return total;
+    public void addTotal(Double valor, Double desconto){
+        total += valor * (1 - desconto);
     }
+
+    public void removeTotal(Integer quantidade, Double valor, Double desconto){
+        total -= (quantidade - 1) * (valor * (1 - desconto));
+    }
+
+//    public Double getTotal(){
+//        for (ItemCarrinho itemCarrinho : itensCarrinho){
+//            total += itemCarrinho.getProduto().getPreco() * (1 - itemCarrinho.getProduto().getDesconto());
+//        }
+//        return total;
+//    }
 
 }

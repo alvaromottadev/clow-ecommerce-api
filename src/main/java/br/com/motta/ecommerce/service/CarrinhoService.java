@@ -108,6 +108,7 @@ public class CarrinhoService {
         ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId());
         if (itemCarrinho != null) {
             if (itemCarrinho.getTamanho().equals(tamanho)) {
+                carrinho.addTotal(itemCarrinho.getProduto().getPreco(), itemCarrinho.getProduto().getDesconto());
                 itemCarrinho.setQuantidade(itemCarrinho.getQuantidade() + 1);
                 return;
             }
@@ -120,6 +121,7 @@ public class CarrinhoService {
         ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId());
         if (itemCarrinho != null){
             carrinho.getItensCarrinho().remove(itemCarrinho);
+            carrinho.removeTotal(itemCarrinho.getQuantidade(), itemCarrinho.getProduto().getPreco(), itemCarrinho.getProduto().getDesconto());
             itemCarrinhoRepository.delete(itemCarrinho);
             return true;
         }

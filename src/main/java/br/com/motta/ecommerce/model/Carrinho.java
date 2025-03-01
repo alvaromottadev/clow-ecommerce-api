@@ -32,4 +32,12 @@ public class Carrinho {
         itensCarrinho.add(item);
     }
 
+    public Double getTotal(){
+        Double total = 0.0;
+        for (ItemCarrinho itemCarrinho : itensCarrinho){
+            total += itemCarrinho.getProduto().getPreco() * (1 - itemCarrinho.getProduto().getDesconto());
+        }
+        return total;
+    }
+
 }

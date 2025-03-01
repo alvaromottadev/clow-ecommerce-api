@@ -47,6 +47,7 @@ public class Produto {
         this.imagemUrl = imagemUrl;
         this.preco = preco;
         this.desconto = desconto;
+
     }
 
 }

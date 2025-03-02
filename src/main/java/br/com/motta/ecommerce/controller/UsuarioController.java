@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
@@ -25,14 +25,14 @@ public class UsuarioController {
         return service.getAllUsuarios();
     }
 
-    @GetMapping("/get/{login}")
-    public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String login){
-        return service.getUsuario(login);
-    }
-
+//    @GetMapping("/get/{login}")
+//    public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String login){
+//        return service.getUsuario(login);
+//    }
+//
     @PostMapping("/register")
     public ResponseEntity<UsuarioResponseDTO> registerUsuario(@Validated @RequestBody UsuarioRequestDTO usuario){
-        Usuario usuarioCriado = new Usuario(usuario.username(), usuario.login(), usuario.password(), usuario.saldo());
+        Usuario usuarioCriado = new Usuario(usuario.username(), usuario.login(), usuario.password(), usuario.role());
         return service.registerUsuario(usuarioCriado);
     }
 
@@ -41,9 +41,9 @@ public class UsuarioController {
         return service.atualizarUsuario(data);
     }
 
-    @DeleteMapping("/deletar/{login}")
-    public ResponseEntity<ResultDTO> deletarUsuario(@PathVariable String login){
-        return service.deletarUsuario(login);
-    }
+//    @DeleteMapping("/deletar/{login}")
+//    public ResponseEntity<ResultDTO> deletarUsuario(@PathVariable String login){
+//        return service.deletarUsuario(login);
+//    }
 
 }

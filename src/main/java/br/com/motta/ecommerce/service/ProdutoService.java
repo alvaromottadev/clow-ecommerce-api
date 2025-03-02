@@ -4,6 +4,7 @@ import br.com.motta.ecommerce.dto.*;
 import br.com.motta.ecommerce.exception.NotFoundException;
 import br.com.motta.ecommerce.model.*;
 import br.com.motta.ecommerce.repository.*;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

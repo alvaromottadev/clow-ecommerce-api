@@ -11,9 +11,11 @@ import br.com.motta.ecommerce.repository.CarrinhoRepository;
 import br.com.motta.ecommerce.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -24,25 +26,26 @@ public class UsuarioService {
     @Autowired
     private CarrinhoRepository carrinhoRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public ResponseEntity<List<UsuarioResponseDTO>> getAllUsuarios(){
         return ResponseEntity.ok(repository.findAll().stream().map(UsuarioResponseDTO::new).toList());
     }
 
     public ResponseEntity<UsuarioResponseDTO> getUsuario(String login){
-        Usuario usuario = repository.findByLogin(login);
+        Optional<Usuario> usuario = repository.findByLogin(login);
         if (usuario == null){
             throw new NotFoundException("O usuário não foi encontrado.");
         }
-        return ResponseEntity.ok(new UsuarioResponseDTO(usuario));
+        return ResponseEntity.ok(new UsuarioResponseDTO(usuario.get()));
     }
 
     public ResponseEntity<UsuarioResponseDTO> registerUsuario(Usuario usuario){
         if (repository.existsByLogin(usuario.getLogin())){
             throw new DuplicateLoginException("Já existe um usuário com esse email cadastrado.");
         }
-        if (usuario.getSaldo() == null){
-            usuario.setSaldo(0.0);
-        }
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         repository.save(usuario);
         Carrinho carrinho = new Carrinho();
         carrinho.setUsuario(usuario);
@@ -58,11 +61,11 @@ public class UsuarioService {
     }
 
     public ResponseEntity<ResultDTO> deletarUsuario(String login){
-        Usuario usuario = repository.findByLogin(login);
+        Optional<Usuario> usuario = repository.findByLogin(login);
         if (usuario == null){
             throw new NotFoundException("O usuário não foi encontrado.");
         }
-        repository.delete(usuario);
+        repository.delete(usuario.get());
         return ResponseEntity.ok(new ResultDTO("O usuário foi removido com sucesso."));
     }
 

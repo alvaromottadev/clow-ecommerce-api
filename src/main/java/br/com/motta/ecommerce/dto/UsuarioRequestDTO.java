@@ -1,5 +1,6 @@
 package br.com.motta.ecommerce.dto;
 
+import br.com.motta.ecommerce.model.UserRole;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -7,7 +8,8 @@ import org.hibernate.validator.constraints.UniqueElements;
 public record UsuarioRequestDTO(
 
         @NotNull
-        @Size(max = 50, message = "O username pode ter no máximo 50 caracteres.") String username,
+        @Size(max = 50, message = "O username pode ter no máximo 50 caracteres.")
+        String username,
 
         @NotNull
         String login,
@@ -15,6 +17,7 @@ public record UsuarioRequestDTO(
         @NotNull
         String password,
 
-        Double saldo) {
+        @NotNull
+        UserRole role) {
 
 }

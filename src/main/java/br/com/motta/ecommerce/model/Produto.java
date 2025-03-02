@@ -46,6 +46,9 @@ public class Produto {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "produto", fetch = FetchType.LAZY)
     private List<ItemCarrinho> itensCarrinho;
 
+    @OneToMany(mappedBy = "produtoPedido", fetch = FetchType.LAZY)
+    private List<ItemPedido> itensPedido;
+
     public void addEstoque(Estoque estoque){
         estoques.add(estoque);
     }

@@ -25,12 +25,16 @@ public class Carrinho {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ItemCarrinho> itensCarrinho;
 
     public void addItem(ItemCarrinho item) {
         total += item.getProduto().getPreco() * (1 - item.getProduto().getDesconto());
         itensCarrinho.add(item);
+    }
+
+    public void removerItem(ItemCarrinho item){
+        itensCarrinho.remove(item);
     }
 
     public void addTotal(Double valor, Double desconto) {
@@ -39,6 +43,10 @@ public class Carrinho {
 
     public void removeTotal(Integer quantidade, Double valor, Double desconto) {
         total -= (quantidade - 1) * (valor * (1 - desconto));
+    }
+
+    public void esvaziar(){
+        itensCarrinho.clear();
     }
 
     public void updateTotal(String produtoId, Double valorAntigo, Double valorNovo) {

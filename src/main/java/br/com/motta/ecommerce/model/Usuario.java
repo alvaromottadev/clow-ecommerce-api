@@ -33,6 +33,9 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario")
     private Carrinho carrinho;
 
+    @OneToMany(mappedBy = "usuarioPedido", cascade = CascadeType.ALL)
+    private List<Pedido> pedidos;
+
     public Usuario(String username, String login, String password, Double saldo){
 
         this.username = username;

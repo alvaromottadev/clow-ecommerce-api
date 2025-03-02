@@ -35,11 +35,11 @@ public class Estoque {
 
     public void removerQuantidade(Integer quantidade){
         Integer quantidadeEstoque = getQuantidade();
-        if (quantidadeEstoque != 0) {
+        if (quantidadeEstoque != 0 && quantidadeEstoque >= quantidade) {
             setQuantidade(getQuantidade() - quantidade);
             return;
         }
-        throw new NoStockException("O produto não possui estoque.");
+        throw new NoStockException("O produto não possui ou não tem essa quantidade no estoque. Quantidade em estoque: " + quantidadeEstoque);
     }
 
     public Estoque(String tamanho, Integer quantidade){

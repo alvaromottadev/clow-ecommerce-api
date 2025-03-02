@@ -5,6 +5,7 @@ import br.com.motta.ecommerce.dto.PedidoResponseDTO;
 import br.com.motta.ecommerce.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class PedidoController {
     }
 
     @PostMapping("/efetuar-pedido/{usuarioId}")
-    public void efetuarPedido(@PathVariable String usuarioId, @RequestBody EnderecoRequestDTO endereco){
+    public void efetuarPedido(@PathVariable String usuarioId, @Validated @RequestBody EnderecoRequestDTO endereco){
         service.efetuarPedido(usuarioId, endereco);
     }
 

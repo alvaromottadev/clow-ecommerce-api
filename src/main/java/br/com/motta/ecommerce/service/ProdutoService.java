@@ -84,6 +84,11 @@ public class ProdutoService {
         if (produto == null) {
             throw new NotFoundException("O produto não foi encontrado.");
         }
+        List<Carrinho> carrinhos = carrinhoRepository.findAllByItensCarrinhoProdutoId(produto.getId());
+        for (Carrinho carrinho : carrinhos){
+            carrinho.updateTotal(produto.getId());
+            carrinhoRepository.save(carrinho);
+        }
         repository.delete(produto);
         return ResponseEntity.ok(new ResultDTO("O produto foi removido com sucesso."));
     }

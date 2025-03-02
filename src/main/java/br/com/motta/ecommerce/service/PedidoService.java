@@ -48,6 +48,7 @@ public class PedidoService {
 
     @Transactional
     public void efetuarPedido(String usuarioId, EnderecoRequestDTO endereco){
+
         String enderecoString = endereco.logradouro() + ", " + endereco.numero() + ", " + endereco.bairro();
         if (endereco.complemento() != null){
             enderecoString += ", " + endereco.complemento();
@@ -67,7 +68,7 @@ public class PedidoService {
         repository.save(pedido);
         for (ItemCarrinho item : carrinho.getItensCarrinho()){
             Double preco = item.getProduto().getPreco() * (1 - item.getProduto().getDesconto());
-            ItemPedido itemPedido = new ItemPedido(item.getProduto(), pedido, item.getTamanho(), item.getQuantidade(), preco);
+            ItemPedido itemPedido = new ItemPedido(item.getProduto().getId(), item.getProduto().getNome(), item.getProduto().getImagemUrl(), pedido, item.getTamanho(), item.getQuantidade(), preco);
             pedido.addItem(itemPedido);
             itemPedidoRepository.save(itemPedido);
         }
@@ -79,13 +80,13 @@ public class PedidoService {
         carrinhoRepository.save(carrinho);
         repository.save(pedido);
 
-        emailService.sendEmail(new Email(carrinho.getUsuario().getLogin(), "Compra Aprovada - Ecommerce API", "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho!"));
+//        emailService.sendEmail(new Email(carrinho.getUsuario().getLogin(), "Compra Aprovada - Ecommerce API", "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho!"));
 
     }
 
     private void updateEstoques(List<ItemPedido> itensPedido){
         for (ItemPedido item : itensPedido){
-            Estoque estoque = estoqueRepository.findByTamanhoAndProdutoEstoqueId(item.getTamanho(), item.getProdutoPedido().getId());
+            Estoque estoque = estoqueRepository.findByTamanhoAndProdutoEstoqueId(item.getTamanho(), item.getProdutoId());
             estoque.removerQuantidade(item.getQuantidade());
         }
     }

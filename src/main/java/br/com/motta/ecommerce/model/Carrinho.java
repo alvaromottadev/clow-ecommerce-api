@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.nio.DoubleBuffer;
 import java.util.List;
 
 @Getter
@@ -45,10 +46,6 @@ public class Carrinho {
         total -= (quantidade - 1) * (valor * (1 - desconto));
     }
 
-    public void esvaziar(){
-        itensCarrinho.clear();
-    }
-
     public void updateTotal(String produtoId, Double valorAntigo, Double valorNovo) {
         int quantidade = 0;
         for (ItemCarrinho item : itensCarrinho) {
@@ -60,7 +57,16 @@ public class Carrinho {
         Double carrinhoDepois = quantidade * valorNovo;
         Double diferenca = carrinhoAntes - carrinhoDepois;
         setTotal(getTotal() - diferenca);
+    }
 
+    public void updateTotal(String produtoId) {
+        Double totalPreco = 0.0;
+        for (ItemCarrinho item : itensCarrinho) {
+            if (item.getProduto().getId().equals(produtoId)) {
+                totalPreco += item.getQuantidade() * (item.getProduto().getPreco() * (1 - item.getProduto().getDesconto()));
+            }
+        }
+        setTotal(getTotal() - totalPreco);
     }
 
 }

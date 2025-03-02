@@ -18,7 +18,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(length = 50, name = "username", unique = true)
+    @Column(length = 50, name = "username")
     private String username;
 
     @Column(name = "login", unique = true)
@@ -30,7 +30,7 @@ public class Usuario {
     @Column(name = "saldo", columnDefinition = "Float default 0")
     private Double saldo;
 
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Carrinho carrinho;
 
     @OneToMany(mappedBy = "usuarioPedido", cascade = CascadeType.ALL)

@@ -3,6 +3,7 @@ package br.com.motta.ecommerce.service;
 import br.com.motta.ecommerce.dto.ResultDTO;
 import br.com.motta.ecommerce.dto.UsuarioAtualizarRequestDTO;
 import br.com.motta.ecommerce.dto.UsuarioResponseDTO;
+import br.com.motta.ecommerce.exception.DuplicateLoginException;
 import br.com.motta.ecommerce.exception.NotFoundException;
 import br.com.motta.ecommerce.model.Carrinho;
 import br.com.motta.ecommerce.model.Usuario;
@@ -36,6 +37,9 @@ public class UsuarioService {
     }
 
     public ResponseEntity<UsuarioResponseDTO> registerUsuario(Usuario usuario){
+        if (repository.existsByLogin(usuario.getLogin())){
+            throw new DuplicateLoginException("Já existe um usuário com esse email cadastrado.");
+        }
         if (usuario.getSaldo() == null){
             usuario.setSaldo(0.0);
         }

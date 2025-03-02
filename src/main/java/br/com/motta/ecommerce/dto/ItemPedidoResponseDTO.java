@@ -6,7 +6,7 @@ public record ItemPedidoResponseDTO(String nome, String tamanho, Integer quantid
 
     public ItemPedidoResponseDTO(ItemPedido pedido){
 
-        this(pedido.getProdutoPedido().getNome(), pedido.getTamanho(), pedido.getQuantidade(), pedido.getPreco());
+        this(pedido.getProdutoNome(), pedido.getTamanho(), pedido.getQuantidade(), pedido.getPreco());
 
     }
 

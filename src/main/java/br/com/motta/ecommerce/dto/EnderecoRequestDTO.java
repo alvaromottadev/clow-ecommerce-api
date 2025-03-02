@@ -1,13 +1,29 @@
 package br.com.motta.ecommerce.dto;
 
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+
 public record EnderecoRequestDTO
 
-        (String logradouro,
-         Integer numero,
-         String bairro,
-         String complemento,
-         String cidade,
-         String estado,
-         String cep) {
+        (
+                @NotNull(message = "O parâmetro logradouro não pode está nulo.")
+                String logradouro,
+
+                @NotNull(message = "O parâmetro numero não pode está nulo.")
+                Integer numero,
+
+                @NotNull(message = "O parâmetro bairro não pode está nulo.")
+                String bairro,
+
+                String complemento,
+
+                @NotNull(message = "O parâmetro cidade não pode está nulo.")
+                String cidade,
+
+                @NotNull(message = "O parâmetro estado não pode está nulo.")
+                String estado,
+
+                @NotNull(message = "O parâmetro cep não pode está nulo.")
+                String cep) {
 
 }

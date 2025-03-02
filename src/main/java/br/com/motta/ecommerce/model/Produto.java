@@ -40,14 +40,14 @@ public class Produto {
     @Column(name = "desconto")
     private Double desconto;
 
-    @OneToMany(mappedBy = "produtoEstoque", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "produtoEstoque", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Estoque> estoques = new LinkedList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "produto", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "produto", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ItemCarrinho> itensCarrinho;
 
-    @OneToMany(mappedBy = "produtoPedido", fetch = FetchType.LAZY)
-    private List<ItemPedido> itensPedido;
+//    @OneToMany(mappedBy = "produtoPedido", fetch = FetchType.LAZY)
+//    private List<ItemPedido> itensPedido;
 
     public void addEstoque(Estoque estoque){
         estoques.add(estoque);

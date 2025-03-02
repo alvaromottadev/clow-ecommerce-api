@@ -28,7 +28,7 @@ public class ExceptionGlobalHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException exception){
-        return new ResponseEntity<>(new ErrorMessage("Já existe um usuário com esse email."), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorMessage("Já existe um " + exception.getMostSpecificCause()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EmptyException.class)
@@ -39,6 +39,11 @@ public class ExceptionGlobalHandler {
     @ExceptionHandler(NoStockException.class)
     public ResponseEntity<?> handleNoStockException(NoStockException exception){
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateLoginException.class)
+    public ResponseEntity<?> handleDuplicateLoginException(DuplicateLoginException exception){
+        return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
 }

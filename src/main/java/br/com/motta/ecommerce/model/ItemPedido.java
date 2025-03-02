@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -16,9 +18,18 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "produto_id")
-    private Produto produtoPedido;
+//    @ManyToOne
+//    @JoinColumn(name = "produto_id")
+//    private Produto produtoPedido;
+
+    @Column(name = "produto_id")
+    private String produtoId;
+
+    @Column(name = "produto_nome")
+    private String produtoNome;
+
+    @Column(name = "imagem_url")
+    private List<String> imagemUrl;
 
     @ManyToOne
     @JoinColumn(name = "pedido_id")
@@ -30,8 +41,10 @@ public class ItemPedido {
 
     private Double preco;
 
-    public ItemPedido(Produto produto, Pedido pedido, String tamanho, Integer quantidade, Double preco){
-        this.produtoPedido = produto;
+    public ItemPedido(String produtoId, String produtoNome, List<String> imagemUrl, Pedido pedido, String tamanho, Integer quantidade, Double preco){
+        this.produtoId = produtoId;
+        this.produtoNome = produtoNome;
+        this.imagemUrl = imagemUrl;
         this.pedido = pedido;
         this.tamanho = tamanho;
         this.quantidade = quantidade;

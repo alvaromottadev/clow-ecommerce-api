@@ -1,13 +1,13 @@
 package br.com.motta.ecommerce.model;
 
-public enum UserRole {
+public enum ClienteRole {
 
     ADMIN("ADMIN"),
     MEMBRO("MEMBRO");
 
     private String role;
 
-    UserRole(String role){
+    ClienteRole(String role){
         this.role = role;
     }
 

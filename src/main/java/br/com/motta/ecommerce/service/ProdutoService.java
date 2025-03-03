@@ -79,7 +79,7 @@ public class ProdutoService {
         return ResponseEntity.ok(new ProdutoResponseDTO(produto));
     }
 
-    public ResponseEntity<ResultDTO> deletarProduto(String apelido) {
+    public ResponseEntity<ResponseDTO> deletarProduto(String apelido) {
         Produto produto = repository.findByApelido(apelido).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
         List<Carrinho> carrinhos = carrinhoRepository.findAllByItensCarrinhoProdutoId(produto.getId());
         for (Carrinho carrinho : carrinhos){
@@ -87,13 +87,14 @@ public class ProdutoService {
             carrinhoRepository.save(carrinho);
         }
         repository.delete(produto);
-        return ResponseEntity.ok(new ResultDTO("O produto foi deletado com sucesso."));
+        return ResponseEntity.ok(new ResponseDTO("O produto foi deletado com sucesso."));
     }
 
     private void updateProduto(Produto produto, ProdutoAtualizarRequestDTO data) {
         produto.setNome(data.nome());
         produto.setApelido(data.apelido());
         produto.setDescricao(data.descricao());
+        produto.setCategoria(data.categoria());
         produto.setImagemUrl(data.imagemUrl());
         produto.setPreco(data.preco());
         produto.setDesconto(data.desconto());

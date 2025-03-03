@@ -1,10 +1,11 @@
 package br.com.motta.ecommerce.service;
 
 import br.com.motta.ecommerce.dto.EmailDTO;
-import br.com.motta.ecommerce.dto.ResultDTO;
+import br.com.motta.ecommerce.dto.ResponseDTO;
 import br.com.motta.ecommerce.dto.pedido.EnderecoRequestDTO;
 import br.com.motta.ecommerce.dto.pedido.PedidoResponseDTO;
 import br.com.motta.ecommerce.exception.EmptyException;
+import br.com.motta.ecommerce.exception.NoBelongException;
 import br.com.motta.ecommerce.exception.NotFoundException;
 import br.com.motta.ecommerce.infra.security.JwtTokenUtil;
 import br.com.motta.ecommerce.model.*;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PedidoService {
@@ -32,12 +34,23 @@ public class PedidoService {
     private EstoqueRepository estoqueRepository;
 
     @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
     private EmailService emailService;
 
     public ResponseEntity<PedidoResponseDTO> findPedido(String token, Long id){
         String login = JwtTokenUtil.getLogin(token);
-        Pedido pedido = repository.findByIdAndClientePedidoLogin(id, login).orElseThrow(() -> new NotFoundException("Pedido não encontrado ou não pertence a você."));
-        return ResponseEntity.ok(new PedidoResponseDTO(pedido));
+        Optional<Pedido> pedido = repository.findById(id);
+        if (pedido.isPresent()){
+            Cliente clientePedido = pedido.get().getClientePedido();
+            Cliente cliente = clienteRepository.findByLogin(login).orElseThrow(() -> new NotFoundException("Cliente não encontrado."));
+            if (cliente.getRole().equals(ClienteRole.ADMIN) || cliente.getLogin().equals(clientePedido.getLogin())){
+                return ResponseEntity.ok(new PedidoResponseDTO(pedido.get()));
+            }
+            throw new NoBelongException("Esse pedido não pertence a você.");
+        }
+        throw new NotFoundException("Pedido não encontrado.");
     }
 
     public ResponseEntity<List<PedidoResponseDTO>> findAllPedidosByClienteLogin(String login){
@@ -85,7 +98,7 @@ public class PedidoService {
         bodyEmail = bodyEmail.concat("\nTotal do Pedido: R$" + String.format("%.2f", pedido.getTotal()));
         emailService.sendEmail(new EmailDTO(carrinho.getCliente().getLogin(), "Compra Aprovada - Clow Ecommerce API", bodyEmail));
 
-        return ResponseEntity.ok(new ResultDTO("Obrigado! Pedido efetuado com sucesso!"));
+        return ResponseEntity.ok(new ResponseDTO("Obrigado! Pedido efetuado com sucesso!"));
 
     }
 

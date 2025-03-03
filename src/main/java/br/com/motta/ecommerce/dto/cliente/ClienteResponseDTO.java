@@ -4,9 +4,9 @@ import br.com.motta.ecommerce.model.Cliente;
 
 public record ClienteResponseDTO(String id, String username, String login, String role) {
 
-    public ClienteResponseDTO(Cliente usuario) {
+    public ClienteResponseDTO(Cliente cliente) {
 
-        this(usuario.getId(), usuario.getUsername(), usuario.getLogin(), usuario.getRole().getRole());
+        this(cliente.getId(), cliente.getUsername(), cliente.getLogin(), cliente.getRole().getRole());
 
     }
 

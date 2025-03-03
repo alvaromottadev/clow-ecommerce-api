@@ -52,4 +52,9 @@ public class ExceptionGlobalHandler {
         return new ResponseEntity<>(new ErrorMessage("Token inválido."), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NoBelongException.class)
+    public ResponseEntity<?> handleNoBelongException(NoBelongException exception){
+        return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 }

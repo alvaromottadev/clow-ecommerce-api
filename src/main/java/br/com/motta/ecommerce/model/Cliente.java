@@ -31,7 +31,7 @@ public class Cliente implements UserDetails {
     private String password;
 
     @Column(name = "user_role")
-    private UserRole role;
+    private ClienteRole role;
 
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Carrinho carrinho;
@@ -39,7 +39,7 @@ public class Cliente implements UserDetails {
     @OneToMany(mappedBy = "clientePedido", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
-    public Cliente(String username, String login, String password, UserRole role){
+    public Cliente(String username, String login, String password, ClienteRole role){
 
         this.username = username;
         this.login = login;

@@ -1,6 +1,6 @@
 package br.com.motta.ecommerce.controller;
 
-import br.com.motta.ecommerce.dto.ResultDTO;
+import br.com.motta.ecommerce.dto.ResponseDTO;
 import br.com.motta.ecommerce.dto.produto.ProdutoAtualizarRequestDTO;
 import br.com.motta.ecommerce.dto.produto.ProdutoRequestDTO;
 import br.com.motta.ecommerce.dto.produto.ProdutoResponseDTO;
@@ -40,7 +40,7 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/deletar/{apelido}")
-    public ResponseEntity<ResultDTO> deletarProduto(@PathVariable String apelido){
+    public ResponseEntity<ResponseDTO> deletarProduto(@PathVariable String apelido){
         return service.deletarProduto(apelido);
     }
 

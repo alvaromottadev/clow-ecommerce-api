@@ -40,21 +40,21 @@ public class SecurityConfig {
                         .requestMatchers("/cliente/atualizar/**").hasRole("ADMIN")
 
                         //Corrigir
+                        .requestMatchers("/cliente/deletar").authenticated()
                         .requestMatchers("/cliente/deletar/**").hasRole("ADMIN")
-                        .requestMatchers("/cliente/deletar").authenticated() //NÃO FUNCIONANDO
 
                         //Produto
-                        .requestMatchers("/produto/deletar/**").hasRole("ADMIN") //OK
-                        .requestMatchers("/produto/get-all").permitAll() //OK
-                        .requestMatchers("/produto/cadastrar").hasRole("ADMIN") //OK
-                        .requestMatchers("/produto/atualizar").hasRole("ADMIN") //OK
+                        .requestMatchers("/produto/deletar/**").hasRole("ADMIN")
+                        .requestMatchers("/produto/get-all").permitAll()
+                        .requestMatchers("/produto/cadastrar").hasRole("ADMIN")
+                        .requestMatchers("/produto/atualizar/**").hasRole("ADMIN")
 
                         //Carrinho
-                        .requestMatchers("/carrinho/adicionar/**").permitAll() // OK
-                        .requestMatchers("/carrinho/remover/**").permitAll() //OK
+                        .requestMatchers("/carrinho/adicionar/**").permitAll()
+                        .requestMatchers("/carrinho/remover/**").permitAll()
                         .requestMatchers("/carrinho/deletar/**").permitAll()
-                        .requestMatchers("/carrinho/get/**").hasRole("ADMIN")
                         .requestMatchers("/carrinho/get").permitAll()
+                        .requestMatchers("/carrinho/get/**").hasRole("ADMIN")
 
                         //Pedido
                         .requestMatchers("/pedido/efetuar-pedido").authenticated()

@@ -27,21 +27,21 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/usuario/get").permitAll()
-                        .requestMatchers("/usuario/get/**").hasRole("ADMIN")
-                        .requestMatchers("/usuario/get-all").hasRole("ADMIN")
+                        .requestMatchers("/cliente/get").permitAll()
+                        .requestMatchers("/cliente/get/**").hasRole("ADMIN")
+                        .requestMatchers("/cliente/get-all").hasRole("ADMIN")
 
                         //POST
-                        .requestMatchers("/usuario/register").permitAll()
-                        .requestMatchers("/usuario/register/").permitAll()
+                        .requestMatchers("/cliente/register").permitAll()
+                        .requestMatchers("/cliente/register/").permitAll()
 
                         //UPDATE
-                        .requestMatchers("/usuario/atualizar").authenticated()
-                        .requestMatchers("/usuario/atualizar/**").hasRole("ADMIN")
+                        .requestMatchers("/cliente/atualizar").authenticated()
+                        .requestMatchers("/cliente/atualizar/**").hasRole("ADMIN")
 
                         //Corrigir
-                        .requestMatchers("/usuario/deletar/**").hasRole("ADMIN")
-                        .requestMatchers("/usuario/deletar").authenticated() //NÃO FUNCIONANDO
+                        .requestMatchers("/cliente/deletar/**").hasRole("ADMIN")
+                        .requestMatchers("/cliente/deletar").authenticated() //NÃO FUNCIONANDO
 
                         //Produto
                         .requestMatchers("/produto/deletar/**").hasRole("ADMIN") //OK
@@ -53,12 +53,13 @@ public class SecurityConfig {
                         .requestMatchers("/carrinho/adicionar/**").permitAll() // OK
                         .requestMatchers("/carrinho/remover/**").permitAll() //OK
                         .requestMatchers("/carrinho/deletar/**").permitAll()
+                        .requestMatchers("/carrinho/get/**").hasRole("ADMIN")
                         .requestMatchers("/carrinho/get").permitAll()
 
                         //Pedido
                         .requestMatchers("/pedido/efetuar-pedido").authenticated()
-                        .requestMatchers("/pedido/ver/**").authenticated() // --> Corrigir ADMIN visualizar
-                        .requestMatchers("/pedido/ver-todos/**").hasRole("ADMIN")
+                        .requestMatchers("/pedido/get/**").authenticated() // --> Corrigir ADMIN visualizar
+                        .requestMatchers("/pedido/get-all/**").hasRole("ADMIN")
 
                         //Estoque
                         .requestMatchers("/estoque/**").hasRole("ADMIN")

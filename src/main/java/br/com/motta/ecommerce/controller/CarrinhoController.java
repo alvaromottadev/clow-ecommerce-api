@@ -27,7 +27,7 @@ public class CarrinhoController {
     }
 
     @PostMapping("/adicionar/{apelido}/{tamanho}")
-    public ResponseEntity<CarrinhoResponseDTO> addProduto(@RequestHeader("Authorization") String token,
+    public ResponseEntity<ResultDTO> addProduto(@RequestHeader("Authorization") String token,
                                                           @PathVariable String apelido,
                                                           @PathVariable String tamanho) {
         return service.addProduto(token, apelido, tamanho);

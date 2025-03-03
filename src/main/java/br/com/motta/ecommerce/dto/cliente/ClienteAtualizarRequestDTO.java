@@ -1,9 +1,9 @@
-package br.com.motta.ecommerce.dto.usuario;
+package br.com.motta.ecommerce.dto.cliente;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record UsuarioAtualizarRequestDTO(
+public record ClienteAtualizarRequestDTO(
 
         @NotNull(message = "O parâmetro id não pode está nulo.")
         @Size(max = 50, message = "O username pode ter no máximo 50 caracteres.")

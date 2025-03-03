@@ -6,9 +6,6 @@ import java.util.List;
 
 public record ProdutoAtualizarRequestDTO(
 
-        @NotNull(message = "O parâmetro id não pode está nulo.")
-        String id,
-
         @NotNull(message = "O apelido id não pode está nulo.")
         String apelido,
 

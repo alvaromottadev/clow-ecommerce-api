@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
-    List<Pedido> findAllByUsuarioPedidoId(String usuarioPedidoId);
+    List<Pedido> findAllByClientePedidoLogin(String clientePedidoLogin);
 
-    Optional<Pedido> findByIdAndUsuarioPedidoLogin(Long id, String usuarioPedidoLogin);
+    Optional<Pedido> findByIdAndClientePedidoLogin(Long id, String clientePedidoLogin);
 
 }

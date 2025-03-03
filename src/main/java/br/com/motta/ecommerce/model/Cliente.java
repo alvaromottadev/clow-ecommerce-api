@@ -14,8 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "usuarios")
-public class Usuario implements UserDetails {
+@Table(name = "clientes")
+public class Cliente implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -33,13 +33,13 @@ public class Usuario implements UserDetails {
     @Column(name = "user_role")
     private UserRole role;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Carrinho carrinho;
 
-    @OneToMany(mappedBy = "usuarioPedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clientePedido", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
-    public Usuario(String username, String login, String password, UserRole role){
+    public Cliente(String username, String login, String password, UserRole role){
 
         this.username = username;
         this.login = login;

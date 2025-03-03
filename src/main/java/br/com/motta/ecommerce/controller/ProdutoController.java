@@ -34,9 +34,9 @@ public class ProdutoController {
         return service.cadastrarProduto(data);
     }
 
-    @PutMapping("/atualizar")
-    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@Validated @RequestBody ProdutoAtualizarRequestDTO data){
-        return service.atualizarProduto(data);
+    @PutMapping("/atualizar/{apelido}")
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable String apelido, @Validated @RequestBody ProdutoAtualizarRequestDTO data){
+        return service.atualizarProduto(apelido, data);
     }
 
     @DeleteMapping("/deletar/{apelido}")

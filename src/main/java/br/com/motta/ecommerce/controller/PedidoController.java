@@ -17,19 +17,19 @@ public class PedidoController {
     @Autowired
     private PedidoService service;
 
-    @GetMapping("/ver/{pedidoId}")
+    @GetMapping("/get/{pedidoId}")
     public ResponseEntity<PedidoResponseDTO> findPedido(@RequestHeader("Authorization") String token, @PathVariable Long pedidoId){
         return service.findPedido(token, pedidoId);
     }
 
-    @GetMapping("/ver-todos/{usuarioId}")
-    public ResponseEntity<List<PedidoResponseDTO>> findAllPedidos(@PathVariable String usuarioId){
-        return service.findAllPedidosByUsuarioId(usuarioId);
+    @GetMapping("/get-all/{login}")
+    public ResponseEntity<List<PedidoResponseDTO>> findAllPedidos(@PathVariable String login){
+        return service.findAllPedidosByClienteLogin(login);
     }
 
     @PostMapping("/efetuar-pedido")
-    public void efetuarPedido(@RequestHeader("Authorization") String token, @Validated @RequestBody EnderecoRequestDTO endereco){
-        service.efetuarPedido(token, endereco);
+    public ResponseEntity<?> efetuarPedido(@RequestHeader("Authorization") String token, @Validated @RequestBody EnderecoRequestDTO endereco){
+        return service.efetuarPedido(token, endereco);
     }
 
 

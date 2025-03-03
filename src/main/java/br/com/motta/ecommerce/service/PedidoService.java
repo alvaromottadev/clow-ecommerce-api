@@ -1,6 +1,7 @@
 package br.com.motta.ecommerce.service;
 
 import br.com.motta.ecommerce.dto.EmailDTO;
+import br.com.motta.ecommerce.dto.ResultDTO;
 import br.com.motta.ecommerce.dto.pedido.EnderecoRequestDTO;
 import br.com.motta.ecommerce.dto.pedido.PedidoResponseDTO;
 import br.com.motta.ecommerce.exception.EmptyException;
@@ -35,12 +36,12 @@ public class PedidoService {
 
     public ResponseEntity<PedidoResponseDTO> findPedido(String token, Long id){
         String login = JwtTokenUtil.getLogin(token);
-        Pedido pedido = repository.findByIdAndUsuarioPedidoLogin(id, login).orElseThrow(() -> new NotFoundException("Pedido não encontrado ou não pertence a você."));
+        Pedido pedido = repository.findByIdAndClientePedidoLogin(id, login).orElseThrow(() -> new NotFoundException("Pedido não encontrado ou não pertence a você."));
         return ResponseEntity.ok(new PedidoResponseDTO(pedido));
     }
 
-    public ResponseEntity<List<PedidoResponseDTO>> findAllPedidosByUsuarioId(String usuarioId){
-        List<Pedido> pedidos = repository.findAllByUsuarioPedidoId(usuarioId);
+    public ResponseEntity<List<PedidoResponseDTO>> findAllPedidosByClienteLogin(String login){
+        List<Pedido> pedidos = repository.findAllByClientePedidoLogin(login);
         if (pedidos.isEmpty()) {
             throw new NotFoundException("Esse usuário não possui pedidos.");
         }
@@ -48,7 +49,7 @@ public class PedidoService {
     }
 
     @Transactional
-    public void efetuarPedido(String token, EnderecoRequestDTO endereco){
+    public ResponseEntity<?> efetuarPedido(String token, EnderecoRequestDTO endereco){
 
         String login = JwtTokenUtil.getLogin(token);
         String enderecoString = endereco.logradouro() + ", " + endereco.numero() + ", " + endereco.bairro();
@@ -57,11 +58,11 @@ public class PedidoService {
         }
         enderecoString += ", " + endereco.cidade() + ", " + endereco.estado() + ", " + endereco.cep();
 
-        Carrinho carrinho = carrinhoRepository.findByUsuarioLogin(login).orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
+        Carrinho carrinho = carrinhoRepository.findByClienteLogin(login).orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
         if (carrinho.getItensCarrinho().isEmpty()){
             throw new EmptyException("Carrinho vazio.");
         }
-        Pedido pedido = new Pedido(carrinho.getUsuario(), enderecoString, carrinho.getTotal());
+        Pedido pedido = new Pedido(carrinho.getCliente(), enderecoString, carrinho.getTotal());
         repository.save(pedido);
         for (ItemCarrinho item : carrinho.getItensCarrinho()){
             Double preco = item.getProduto().getPreco() * (1 - item.getProduto().getDesconto());
@@ -77,7 +78,14 @@ public class PedidoService {
         carrinhoRepository.save(carrinho);
         repository.save(pedido);
 
-        emailService.sendEmail(new EmailDTO(carrinho.getUsuario().getLogin(), "Compra Aprovada - Ecommerce API", "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho!"));
+        String bodyEmail = "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho! \nID do Pedido: " + pedido.getId() + "\n\nProdutos: ";
+        for (ItemPedido itens : pedido.getItensPedido()){
+            bodyEmail = bodyEmail.concat("\n" + itens.getProdutoNome() + " - " + itens.getTamanho());
+        }
+        bodyEmail = bodyEmail.concat("\nTotal do Pedido: R$" + String.format("%.2f", pedido.getTotal()));
+        emailService.sendEmail(new EmailDTO(carrinho.getCliente().getLogin(), "Compra Aprovada - Clow Ecommerce API", bodyEmail));
+
+        return ResponseEntity.ok(new ResultDTO("Obrigado! Pedido efetuado com sucesso!"));
 
     }
 

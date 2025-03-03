@@ -21,15 +21,13 @@ public class Pedido {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuarioPedido;
+    @JoinColumn(name = "cliente_id")
+    private Cliente clientePedido;
 
     private LocalDateTime dataPedido;
 
     private Double total;
 
-//    @ManyToOne
-//    @JoinColumn(name = "endereco_id")
     private String endereco;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -39,9 +37,9 @@ public class Pedido {
         itensPedido.add(item);
     }
 
-    public Pedido(Usuario usuario, String endereco, Double total){
+    public Pedido(Cliente cliente, String endereco, Double total){
         this.itensPedido = new ArrayList<>();
-        this.usuarioPedido = usuario;
+        this.clientePedido = cliente;
         this.endereco = endereco;
         this.total = total;
         this.dataPedido = LocalDateTime.now();

@@ -1,6 +1,6 @@
 package br.com.motta.ecommerce.infra.security;
 
-import br.com.motta.ecommerce.model.Usuario;
+import br.com.motta.ecommerce.model.Cliente;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,31 +8,31 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-public class UsuarioDetails implements UserDetails {
+public class ClienteDetails implements UserDetails {
 
-    private final Usuario usuario;
+    private final Cliente cliente;
 
-    public UsuarioDetails(Usuario usuario) {
-        this.usuario = usuario;
+    public ClienteDetails(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public String getId(){
-        return usuario.getId();
+        return cliente.getId();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRole().toString().toUpperCase()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + cliente.getRole().toString().toUpperCase()));
     }
 
     @Override
     public String getPassword() {
-        return usuario.getPassword();
+        return cliente.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return usuario.getLogin();
+        return cliente.getLogin();
     }
 
     @Override

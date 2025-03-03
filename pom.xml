@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.motta</groupId>
-	<artifactId>e-commerceapi</artifactId>
+	<artifactId>clowe-commerceapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>E-Commerce API</name>
+	<name>Clow E-Commerce API</name>
 	<description>API RESTful para um E-Commerce</description>
 	<url/>
 	<licenses>

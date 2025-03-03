@@ -8,12 +8,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarrinhoRepository extends JpaRepository<Carrinho, String> {
 
-    Carrinho findByUsuarioLogin(String login);
+    Optional<Carrinho> findByUsuarioLogin(String login);
 
-    Carrinho findByUsuarioId(String usuarioId);
+    Optional<Carrinho> findByUsuarioId(String usuarioId);
 
     List<Carrinho> findAllByItensCarrinhoProdutoId(String produtoId);
 

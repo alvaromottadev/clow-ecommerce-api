@@ -1,4 +1,4 @@
-package br.com.motta.ecommerce.dto;
+package br.com.motta.ecommerce.dto.produto;
 
 import jakarta.validation.constraints.NotNull;
 

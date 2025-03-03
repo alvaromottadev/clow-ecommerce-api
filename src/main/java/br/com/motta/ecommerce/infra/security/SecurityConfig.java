@@ -26,33 +26,48 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-//                        //Produtos
-//                        .requestMatchers("/produto").permitAll()
-//                        .requestMatchers("/produto/cadastrar").hasRole("ADMIN")
-//                        .requestMatchers("/produto/atualizar").hasRole("ADMIN")
-//                        .requestMatchers("/produto/get-all").permitAll()
-//                        .requestMatchers("/produto/deletar/**").hasRole("ADMIN")
-//
-//                        //Carrinho
-//                        .requestMatchers("/carrinho/**").permitAll()
-//
-//                        //Usuario
-//                        .requestMatchers("/usuario/atualizar").hasRole("ADMIN")
-//                        .requestMatchers("/usuario/get-all").hasRole("ADMIN")
-//                        .requestMatchers("/usuario/get/**").permitAll()
-//                        .requestMatchers("/usuario/deletar/**").hasRole("ADMIN")
-//
-//                        //Email
-//                        .requestMatchers("/email").hasRole("ADMIN")
+
+                        .requestMatchers("/usuario/get").permitAll()
+                        .requestMatchers("/usuario/get/**").hasRole("ADMIN")
+                        .requestMatchers("/usuario/get-all").hasRole("ADMIN")
+
+                        //POST
+                        .requestMatchers("/usuario/register").permitAll()
+                        .requestMatchers("/usuario/register/").permitAll()
+
+                        //UPDATE
+                        .requestMatchers("/usuario/atualizar").authenticated()
+                        .requestMatchers("/usuario/atualizar/**").hasRole("ADMIN")
+
+                        //Corrigir
+                        .requestMatchers("/usuario/deletar/**").hasRole("ADMIN")
+                        .requestMatchers("/usuario/deletar").authenticated() //NÃO FUNCIONANDO
+
+                        //Produto
+                        .requestMatchers("/produto/deletar/**").hasRole("ADMIN") //OK
+                        .requestMatchers("/produto/get-all").permitAll() //OK
+                        .requestMatchers("/produto/cadastrar").hasRole("ADMIN") //OK
+                        .requestMatchers("/produto/atualizar").hasRole("ADMIN") //OK
+
+                        //Carrinho
+                        .requestMatchers("/carrinho/adicionar/**").permitAll() // OK
+                        .requestMatchers("/carrinho/remover/**").permitAll() //OK
+                        .requestMatchers("/carrinho/deletar/**").permitAll()
+                        .requestMatchers("/carrinho/get").permitAll()
+
+                        //Pedido
+                        .requestMatchers("/pedido/efetuar-pedido").authenticated()
+                        .requestMatchers("/pedido/ver/**").authenticated() // --> Corrigir ADMIN visualizar
+                        .requestMatchers("/pedido/ver-todos/**").hasRole("ADMIN")
+
+                        //Estoque
+                        .requestMatchers("/estoque/**").hasRole("ADMIN")
 
 
-                        .requestMatchers("/auth/login").permitAll()  // endpoint de login público
-                        .requestMatchers("/usuario/**").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/context-path/**", "/api-docs").permitAll()  // Permite acesso ao Swagger
-                        .anyRequest().authenticated() // Requer autenticação para as demais requisições
+                        .anyRequest().authenticated()
                 );
-
-        // Adiciona o filtro JWT antes do filtro padrão de autenticação
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

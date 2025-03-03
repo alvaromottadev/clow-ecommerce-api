@@ -1,10 +1,9 @@
 package br.com.motta.ecommerce.controller;
 
 import br.com.motta.ecommerce.dto.ResultDTO;
-import br.com.motta.ecommerce.dto.ProdutoAtualizarRequestDTO;
-import br.com.motta.ecommerce.dto.ProdutoRequestDTO;
-import br.com.motta.ecommerce.dto.ProdutoResponseDTO;
-import br.com.motta.ecommerce.model.Produto;
+import br.com.motta.ecommerce.dto.produto.ProdutoAtualizarRequestDTO;
+import br.com.motta.ecommerce.dto.produto.ProdutoRequestDTO;
+import br.com.motta.ecommerce.dto.produto.ProdutoResponseDTO;
 import br.com.motta.ecommerce.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

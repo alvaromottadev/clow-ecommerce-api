@@ -1,4 +1,4 @@
-package br.com.motta.ecommerce.dto;
+package br.com.motta.ecommerce.dto.pedido;
 
 import br.com.motta.ecommerce.model.Pedido;
 import java.time.LocalDateTime;

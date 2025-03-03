@@ -1,9 +1,10 @@
 package br.com.motta.ecommerce.service;
 
-import br.com.motta.ecommerce.dto.CarrinhoResponseDTO;
+import br.com.motta.ecommerce.dto.carrinho.CarrinhoResponseDTO;
 import br.com.motta.ecommerce.dto.ResultDTO;
 import br.com.motta.ecommerce.exception.NoStockException;
 import br.com.motta.ecommerce.exception.NotFoundException;
+import br.com.motta.ecommerce.infra.security.JwtTokenUtil;
 import br.com.motta.ecommerce.model.Carrinho;
 import br.com.motta.ecommerce.model.Estoque;
 import br.com.motta.ecommerce.model.ItemCarrinho;
@@ -12,6 +13,7 @@ import br.com.motta.ecommerce.repository.CarrinhoRepository;
 import br.com.motta.ecommerce.repository.EstoqueRepository;
 import br.com.motta.ecommerce.repository.ItemCarrinhoRepository;
 import br.com.motta.ecommerce.repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,34 +35,29 @@ public class CarrinhoService {
     @Autowired
     private EstoqueRepository estoqueRepository;
 
-    public ResponseEntity<CarrinhoResponseDTO> getCarrinho(String login) {
-        Carrinho carrinho = repository.findByUsuarioLogin(login);
-        if (carrinho == null) {
-            throw new NotFoundException("Carrinho não encontrado.");
-        }
+    public ResponseEntity<CarrinhoResponseDTO> getCarrinho(String token) {
+        String login = JwtTokenUtil.getLogin(token);
+        Carrinho carrinho = repository.findByUsuarioLogin(login).orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
         return ResponseEntity.ok(new CarrinhoResponseDTO(carrinho));
     }
 
-    public ResponseEntity<CarrinhoResponseDTO> addProduto(String login, String apelido, String tamanho) {
+    public ResponseEntity<?> getCarrinhoByLogin(String login){
+        return null;
+    }
 
-        Carrinho carrinho = repository.findByUsuarioLogin(login);
-        if (carrinho == null) {
-            throw new NotFoundException("Carrinho não encontrado.");
-        }
+    @Transactional
+    public ResponseEntity<CarrinhoResponseDTO> addProduto(String token, String apelido, String tamanho) {
+        String login = JwtTokenUtil.getLogin(token);
+        tamanho = tamanho.toUpperCase();
+        Carrinho carrinho = repository.findByUsuarioLogin(login).orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
+        Produto produto = produtoRepository.findByApelido(apelido).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
 
-        Produto produto = produtoRepository.findByApelido(apelido);
-        if (produto == null) {
-            throw new NotFoundException("Produto não encontrado.");
-        }
-
-        Estoque estoque = estoqueRepository.findByTamanhoAndProdutoEstoqueId(tamanho, produto.getId());
-
+        Estoque estoque = estoqueRepository.findByTamanhoAndProdutoEstoqueId(tamanho, produto.getId()).orElse(null);
         if (estoque == null){
             throw new NotFoundException("Tamanho não encontrado.");
         }
-
         if (estoque.getQuantidade() <= 0){
-            throw new NoStockException("Estoque indisponível.");
+            throw new NoStockException("O produto " + produto.getNome() + " - " + tamanho + " não possui estoque.");
         }
 
         adicionarProduto(carrinho, produto, tamanho);
@@ -70,16 +67,11 @@ public class CarrinhoService {
 
     }
 
-    public ResponseEntity<ResultDTO> deletarProdutoCarrinho(String login, String apelido, String tamanho) {
-        Carrinho carrinho = repository.findByUsuarioLogin(login);
-        if (carrinho == null) {
-            throw new NotFoundException("Carrinho não encontrado.");
-        }
-
-        Produto produto = produtoRepository.findByApelido(apelido);
-        if (produto == null) {
-            throw new NotFoundException("Produto não encontrado.");
-        }
+    @Transactional
+    public ResponseEntity<ResultDTO> deletarProdutoCarrinho(String token, String apelido, String tamanho) {
+        String login = JwtTokenUtil.getLogin(token);
+        Carrinho carrinho = repository.findByUsuarioLogin(login).orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
+        Produto produto = produtoRepository.findByApelido(apelido).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
 
         if (deletarProduto(carrinho, produto, tamanho)){
             Double preco = produto.getPreco();
@@ -92,17 +84,11 @@ public class CarrinhoService {
         return ResponseEntity.badRequest().body(new ResultDTO("Produto não encontrado no carrinho."));
     }
 
-    public ResponseEntity<ResultDTO> removerProduto(String login, String apelido, String tamanho){
-
-        Carrinho carrinho = repository.findByUsuarioLogin(login);
-        if (carrinho == null) {
-            throw new NotFoundException("Carrinho não encontrado.");
-        }
-
-        Produto produto = produtoRepository.findByApelido(apelido);
-        if (produto == null) {
-            throw new NotFoundException("Produto não encontrado.");
-        }
+    @Transactional
+    public ResponseEntity<ResultDTO> removerProduto(String token, String apelido, String tamanho){
+        String login = JwtTokenUtil.getLogin(token);
+        Carrinho carrinho = repository.findByUsuarioLogin(login).orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
+        Produto produto = produtoRepository.findByApelido(apelido).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
 
         if (removerProduto(carrinho, produto, tamanho)) {
             Double preco = produto.getPreco();
@@ -117,7 +103,7 @@ public class CarrinhoService {
     }
 
     private void adicionarProduto(Carrinho carrinho, Produto produto, String tamanho) {
-        ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId());
+        ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId()).orElse(null);
         if (itemCarrinho != null) {
             if (itemCarrinho.getTamanho().equals(tamanho)) {
                 carrinho.addTotal(itemCarrinho.getProduto().getPreco(), itemCarrinho.getProduto().getDesconto());
@@ -130,7 +116,7 @@ public class CarrinhoService {
     }
 
     private boolean deletarProduto(Carrinho carrinho, Produto produto, String tamanho) {
-        ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId());
+        ItemCarrinho itemCarrinho = itemCarrinhoRepository.findByTamanhoAndProdutoIdAndCarrinhoId(tamanho, produto.getId(), carrinho.getId()).orElse(null);
         if (itemCarrinho != null){
             carrinho.getItensCarrinho().remove(itemCarrinho);
             carrinho.removeTotal(itemCarrinho.getQuantidade(), itemCarrinho.getProduto().getPreco(), itemCarrinho.getProduto().getDesconto());

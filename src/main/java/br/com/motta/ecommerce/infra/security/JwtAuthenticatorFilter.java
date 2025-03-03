@@ -1,5 +1,6 @@
 package br.com.motta.ecommerce.infra.security;
 
+import br.com.motta.ecommerce.exception.ErrorMessage;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public class JwtAuthenticatorFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(token);
             } catch (Exception e) {
-                // Trate a exceção conforme necessário
+                new ErrorMessage(e.getMessage());
             }
         }
 

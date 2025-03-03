@@ -1,9 +1,8 @@
-package br.com.motta.ecommerce.dto;
+package br.com.motta.ecommerce.dto.usuario;
 
 import br.com.motta.ecommerce.model.UserRole;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.UniqueElements;
 
 public record UsuarioRequestDTO(
 

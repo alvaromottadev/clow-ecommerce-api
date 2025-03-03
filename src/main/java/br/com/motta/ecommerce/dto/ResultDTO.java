@@ -1,4 +1,4 @@
 package br.com.motta.ecommerce.dto;
 
-public record ResultDTO(String result) {
+public record ResultDTO(String message) {
 }

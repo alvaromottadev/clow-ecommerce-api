@@ -1,16 +1,18 @@
 package br.com.motta.ecommerce.service;
 
 import br.com.motta.ecommerce.dto.*;
+import br.com.motta.ecommerce.dto.estoque.EstoqueRequestDTO;
+import br.com.motta.ecommerce.dto.produto.ProdutoAtualizarRequestDTO;
+import br.com.motta.ecommerce.dto.produto.ProdutoRequestDTO;
+import br.com.motta.ecommerce.dto.produto.ProdutoResponseDTO;
 import br.com.motta.ecommerce.exception.NotFoundException;
 import br.com.motta.ecommerce.model.*;
 import br.com.motta.ecommerce.repository.*;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -27,10 +29,7 @@ public class ProdutoService {
     }
 
     public ResponseEntity<ProdutoResponseDTO> getProduto(String apelido) {
-        Produto produto = repository.findByApelido(apelido);
-        if (produto == null) {
-            throw new NotFoundException("Produto não encontrado.");
-        }
+        Produto produto = repository.findByApelido(apelido).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
         return ResponseEntity.ok(new ProdutoResponseDTO(produto));
     }
 
@@ -39,7 +38,7 @@ public class ProdutoService {
         String apelido = produtoCriado.getNome()
                 .toLowerCase()
                 .replace(" ", "-");
-        Produto produtoEncontrado = repository.findByApelido(apelido);
+        Produto produtoEncontrado = repository.findByApelido(apelido).orElse(null);
 
         if (produtoCriado.getDesconto() == null) {
             produtoCriado.setDesconto(0.0);
@@ -58,7 +57,7 @@ public class ProdutoService {
             Random random = new Random();
             int extra = random.nextInt(50);
             apelido = apelido.concat(extra + "");
-            produtoEncontrado = repository.findByApelido(apelido);
+            produtoEncontrado = repository.findByApelido(apelido).orElse(null);
         }
 
         produtoCriado.setApelido(apelido);
@@ -81,10 +80,7 @@ public class ProdutoService {
     }
 
     public ResponseEntity<ResultDTO> deletarProduto(String apelido) {
-        Produto produto = repository.findByApelido(apelido);
-        if (produto == null) {
-            throw new NotFoundException("O produto não foi encontrado.");
-        }
+        Produto produto = repository.findByApelido(apelido).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
         List<Carrinho> carrinhos = carrinhoRepository.findAllByItensCarrinhoProdutoId(produto.getId());
         for (Carrinho carrinho : carrinhos){
             carrinho.updateTotal(produto.getId());

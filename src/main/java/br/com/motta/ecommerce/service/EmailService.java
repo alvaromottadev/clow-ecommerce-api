@@ -1,6 +1,6 @@
 package br.com.motta.ecommerce.service;
 
-import br.com.motta.ecommerce.dto.Email;
+import br.com.motta.ecommerce.dto.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,7 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(Email email){
+    public void sendEmail(EmailDTO email){
         var message = new SimpleMailMessage();
         message.setFrom("noreply@ecommerce.com");
         message.setTo(email.to());

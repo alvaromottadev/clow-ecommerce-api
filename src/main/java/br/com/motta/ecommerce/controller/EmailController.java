@@ -1,6 +1,6 @@
 package br.com.motta.ecommerce.controller;
 
-import br.com.motta.ecommerce.dto.Email;
+import br.com.motta.ecommerce.dto.EmailDTO;
 import br.com.motta.ecommerce.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,7 @@ public class EmailController {
     private EmailService service;
 
     @PostMapping
-    public void sendEmail(@RequestBody Email email){
+    public void sendEmail(@RequestBody EmailDTO email){
         service.sendEmail(email);
     }
 

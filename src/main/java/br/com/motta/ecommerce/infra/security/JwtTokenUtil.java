@@ -4,6 +4,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -12,9 +13,8 @@ import java.util.Date;
 @Component
 public class JwtTokenUtil {
 
-    // Gerando a chave secreta segura com 512 bits para o HS512
-    private final SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private final long jwtExpirationMs = 86400000; // 24 horas de expiração
+    private static final SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private final long jwtExpirationMs = 86400000;
 
     public String generateToken(UsuarioDetails userDetails) {
         return Jwts.builder()
@@ -23,7 +23,7 @@ public class JwtTokenUtil {
                 .claim("role", userDetails.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(jwtSecret)  // Usando a chave secreta gerada
+                .signWith(jwtSecret)
                 .compact();
     }
 
@@ -40,4 +40,15 @@ public class JwtTokenUtil {
         }
         return false;
     }
+
+    public static String getLogin(String token){
+        token = token.substring(7);
+        String login = (Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject());
+        return login;
+    }
+
 }

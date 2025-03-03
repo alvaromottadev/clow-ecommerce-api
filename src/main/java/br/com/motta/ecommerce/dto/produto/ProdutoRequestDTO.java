@@ -1,5 +1,6 @@
-package br.com.motta.ecommerce.dto;
+package br.com.motta.ecommerce.dto.produto;
 
+import br.com.motta.ecommerce.dto.estoque.EstoqueRequestDTO;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;

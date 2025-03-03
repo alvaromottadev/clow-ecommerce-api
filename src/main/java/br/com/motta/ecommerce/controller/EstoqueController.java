@@ -1,14 +1,10 @@
 package br.com.motta.ecommerce.controller;
 
-import br.com.motta.ecommerce.dto.EstoqueAtualizadoResponseDTO;
-import br.com.motta.ecommerce.dto.EstoqueResponseDTO;
+import br.com.motta.ecommerce.dto.estoque.EstoqueAtualizadoResponseDTO;
 import br.com.motta.ecommerce.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/estoque")
@@ -17,18 +13,23 @@ public class EstoqueController {
     @Autowired
     private EstoqueService service;
 
-    @PostMapping("/adicionar/{id}/{tamanho}/{quantidade}")
-    public ResponseEntity<EstoqueAtualizadoResponseDTO> adicionarEstoque(@PathVariable String id,
-                                                                         @PathVariable String tamanho,
-                                                                         @PathVariable Integer quantidade){
-        return service.adicionarEstoque(id, tamanho, quantidade);
+    @GetMapping("/get/{apelido}")
+    public ResponseEntity<?> getEstoque(@PathVariable String apelido){
+        return null;
     }
 
-    @PostMapping("/remover/{id}/{tamanho}/{quantidade}")
-    public ResponseEntity<EstoqueAtualizadoResponseDTO> removerEstoque(@PathVariable String id,
+    @PostMapping("/adicionar/{apelido}/{tamanho}/{quantidade}")
+    public ResponseEntity<EstoqueAtualizadoResponseDTO> adicionarEstoque(@PathVariable String apelido,
+                                                                         @PathVariable String tamanho,
+                                                                         @PathVariable Integer quantidade){
+        return service.adicionarEstoque(apelido, tamanho, quantidade);
+    }
+
+    @PostMapping("/remover/{apelido}/{tamanho}/{quantidade}")
+    public ResponseEntity<EstoqueAtualizadoResponseDTO> removerEstoque(@PathVariable String apelido,
                                @PathVariable String tamanho,
                                @PathVariable Integer quantidade){
-        return service.removerEstoque(id, tamanho, quantidade);
+        return service.removerEstoque(apelido, tamanho, quantidade);
     }
 
 }

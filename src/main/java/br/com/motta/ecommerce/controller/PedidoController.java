@@ -1,7 +1,7 @@
 package br.com.motta.ecommerce.controller;
 
-import br.com.motta.ecommerce.dto.EnderecoRequestDTO;
-import br.com.motta.ecommerce.dto.PedidoResponseDTO;
+import br.com.motta.ecommerce.dto.pedido.EnderecoRequestDTO;
+import br.com.motta.ecommerce.dto.pedido.PedidoResponseDTO;
 import br.com.motta.ecommerce.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ public class PedidoController {
     private PedidoService service;
 
     @GetMapping("/ver/{pedidoId}")
-    public ResponseEntity<PedidoResponseDTO> findPedido(@PathVariable Long pedidoId){
-        return service.findPedido(pedidoId);
+    public ResponseEntity<PedidoResponseDTO> findPedido(@RequestHeader("Authorization") String token, @PathVariable Long pedidoId){
+        return service.findPedido(token, pedidoId);
     }
 
     @GetMapping("/ver-todos/{usuarioId}")
@@ -27,9 +27,9 @@ public class PedidoController {
         return service.findAllPedidosByUsuarioId(usuarioId);
     }
 
-    @PostMapping("/efetuar-pedido/{usuarioId}")
-    public void efetuarPedido(@PathVariable String usuarioId, @Validated @RequestBody EnderecoRequestDTO endereco){
-        service.efetuarPedido(usuarioId, endereco);
+    @PostMapping("/efetuar-pedido")
+    public void efetuarPedido(@RequestHeader("Authorization") String token, @Validated @RequestBody EnderecoRequestDTO endereco){
+        service.efetuarPedido(token, endereco);
     }
 
 

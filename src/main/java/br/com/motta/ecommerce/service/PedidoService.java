@@ -1,10 +1,11 @@
 package br.com.motta.ecommerce.service;
 
-import br.com.motta.ecommerce.dto.Email;
-import br.com.motta.ecommerce.dto.EnderecoRequestDTO;
-import br.com.motta.ecommerce.dto.PedidoResponseDTO;
+import br.com.motta.ecommerce.dto.EmailDTO;
+import br.com.motta.ecommerce.dto.pedido.EnderecoRequestDTO;
+import br.com.motta.ecommerce.dto.pedido.PedidoResponseDTO;
 import br.com.motta.ecommerce.exception.EmptyException;
 import br.com.motta.ecommerce.exception.NotFoundException;
+import br.com.motta.ecommerce.infra.security.JwtTokenUtil;
 import br.com.motta.ecommerce.model.*;
 import br.com.motta.ecommerce.repository.*;
 import jakarta.transaction.Transactional;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.net.http.HttpClient;
 import java.util.List;
 
 @Service
@@ -33,8 +33,9 @@ public class PedidoService {
     @Autowired
     private EmailService emailService;
 
-    public ResponseEntity<PedidoResponseDTO> findPedido(Long id){
-        Pedido pedido = repository.findById(id).orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
+    public ResponseEntity<PedidoResponseDTO> findPedido(String token, Long id){
+        String login = JwtTokenUtil.getLogin(token);
+        Pedido pedido = repository.findByIdAndUsuarioPedidoLogin(id, login).orElseThrow(() -> new NotFoundException("Pedido não encontrado ou não pertence a você."));
         return ResponseEntity.ok(new PedidoResponseDTO(pedido));
     }
 
@@ -47,23 +48,19 @@ public class PedidoService {
     }
 
     @Transactional
-    public void efetuarPedido(String usuarioId, EnderecoRequestDTO endereco){
+    public void efetuarPedido(String token, EnderecoRequestDTO endereco){
 
+        String login = JwtTokenUtil.getLogin(token);
         String enderecoString = endereco.logradouro() + ", " + endereco.numero() + ", " + endereco.bairro();
         if (endereco.complemento() != null){
             enderecoString += ", " + endereco.complemento();
         }
         enderecoString += ", " + endereco.cidade() + ", " + endereco.estado() + ", " + endereco.cep();
 
-        Carrinho carrinho = carrinhoRepository.findByUsuarioId(usuarioId);
-        if (carrinho == null){
-            throw new NotFoundException("Carrinho não encontrado.");
-        }
-
+        Carrinho carrinho = carrinhoRepository.findByUsuarioLogin(login).orElseThrow(() -> new NotFoundException("Carrinho não encontrado."));
         if (carrinho.getItensCarrinho().isEmpty()){
             throw new EmptyException("Carrinho vazio.");
         }
-
         Pedido pedido = new Pedido(carrinho.getUsuario(), enderecoString, carrinho.getTotal());
         repository.save(pedido);
         for (ItemCarrinho item : carrinho.getItensCarrinho()){
@@ -80,13 +77,13 @@ public class PedidoService {
         carrinhoRepository.save(carrinho);
         repository.save(pedido);
 
-//        emailService.sendEmail(new Email(carrinho.getUsuario().getLogin(), "Compra Aprovada - Ecommerce API", "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho!"));
+        emailService.sendEmail(new EmailDTO(carrinho.getUsuario().getLogin(), "Compra Aprovada - Ecommerce API", "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho!"));
 
     }
 
     private void updateEstoques(List<ItemPedido> itensPedido){
         for (ItemPedido item : itensPedido){
-            Estoque estoque = estoqueRepository.findByTamanhoAndProdutoEstoqueId(item.getTamanho(), item.getProdutoId());
+            Estoque estoque = estoqueRepository.findByTamanhoAndProdutoEstoqueId(item.getTamanho(), item.getProdutoId()).orElseThrow(() -> new NotFoundException("Estoque não encontrado. !!!"));
             estoque.removerQuantidade(item.getQuantidade());
         }
     }

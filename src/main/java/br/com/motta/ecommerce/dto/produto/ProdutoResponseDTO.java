@@ -1,5 +1,6 @@
-package br.com.motta.ecommerce.dto;
+package br.com.motta.ecommerce.dto.produto;
 
+import br.com.motta.ecommerce.dto.estoque.EstoqueResponseDTO;
 import br.com.motta.ecommerce.model.Produto;
 
 import java.util.List;

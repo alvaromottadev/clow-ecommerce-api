@@ -1,10 +1,9 @@
 package br.com.motta.ecommerce.controller;
 
-import br.com.motta.ecommerce.dto.LoginRequestDTO;
-import br.com.motta.ecommerce.dto.LoginResponseDTO;
+import br.com.motta.ecommerce.dto.authentication.LoginRequestDTO;
+import br.com.motta.ecommerce.dto.authentication.LoginResponseDTO;
 import br.com.motta.ecommerce.infra.security.JwtTokenUtil;
 import br.com.motta.ecommerce.infra.security.UsuarioDetails;
-import br.com.motta.ecommerce.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

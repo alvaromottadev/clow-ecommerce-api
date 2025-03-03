@@ -1,5 +1,6 @@
 package br.com.motta.ecommerce.exception;
 
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,11 @@ public class ExceptionGlobalHandler {
     @ExceptionHandler(DuplicateLoginException.class)
     public ResponseEntity<?> handleDuplicateLoginException(DuplicateLoginException exception){
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<?> handleSignatureException(SignatureException exception){
+        return new ResponseEntity<>(new ErrorMessage("Token inválido."), HttpStatus.BAD_REQUEST);
     }
 
 }

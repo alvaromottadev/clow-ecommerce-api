@@ -97,7 +97,6 @@ public class PedidoService {
         }
         bodyEmail = bodyEmail.concat("\nTotal do Pedido: R$" + String.format("%.2f", pedido.getTotal()));
         emailService.sendEmail(new EmailDTO(carrinho.getCliente().getLogin(), "Compra Aprovada - Clow Ecommerce API", bodyEmail));
-
         return ResponseEntity.ok(new ResponseDTO("Obrigado! Pedido efetuado com sucesso!"));
 
     }

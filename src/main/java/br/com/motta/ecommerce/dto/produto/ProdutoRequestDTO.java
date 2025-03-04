@@ -24,9 +24,7 @@ public record ProdutoRequestDTO(
         @NotNull(message = "O parâmetro preço não pode está null.")
         Double preco,
 
-        Double desconto,
-
-        Integer quantidade)
+        Double desconto)
 
 {
 

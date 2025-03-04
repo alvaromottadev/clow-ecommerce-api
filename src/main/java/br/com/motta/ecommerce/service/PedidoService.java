@@ -1,5 +1,6 @@
 package br.com.motta.ecommerce.service;
 
+import br.com.motta.ecommerce.controller.PaymentController;
 import br.com.motta.ecommerce.dto.EmailDTO;
 import br.com.motta.ecommerce.dto.ResponseDTO;
 import br.com.motta.ecommerce.dto.pedido.EnderecoRequestDTO;
@@ -89,20 +90,22 @@ public class PedidoService {
 
         updateEstoques(pedido.getItensPedido());
         carrinho.getItensCarrinho().clear();
-        carrinho.setTotal(0.0);
 
         carrinhoRepository.save(carrinho);
         repository.save(pedido);
 
-        String bodyEmail = "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho! \nID do Pedido: " + pedido.getId() + "\n\nProdutos: ";
-        for (ItemPedido itens : pedido.getItensPedido()){
-            bodyEmail = bodyEmail.concat("\n" + itens.getProdutoNome() + " - " + itens.getTamanho());
-        }
-        bodyEmail = bodyEmail.concat("\nTotal do Pedido: R$" + String.format("%.2f", pedido.getTotal()));
+//        String bodyEmail = "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho! \nID do Pedido: " + pedido.getId() + "\n\nProdutos: ";
+//        for (ItemPedido itens : pedido.getItensPedido()){
+//            bodyEmail = bodyEmail.concat("\n" + itens.getProdutoNome() + " - " + itens.getTamanho());
+//        }
+//        bodyEmail = bodyEmail.concat("\nTotal do Pedido: R$" + String.format("%.2f", pedido.getTotal()));
 //        emailService.sendEmail(new EmailDTO(carrinho.getCliente().getLogin(), "Compra Aprovada - Clow Ecommerce API", bodyEmail));
 //        return ResponseEntity.ok(new ResponseDTO("Obrigado! Pedido efetuado com sucesso!"));
 
-        return paymentService.efetuarPedido("Produto", 1, 0.1);
+        Cliente cliente = clienteRepository.findByLogin(login).orElseThrow(() -> new NotFoundException("Cliente não encontrado."));
+        String urlPayment = paymentService.efetuarPedido(cliente, "Pedido em Clow E-Commerce", 1, carrinho.getTotal());
+        carrinho.setTotal(0.0);
+        return ResponseEntity.ok(urlPayment);
     }
 
     private void updateEstoques(List<ItemPedido> itensPedido){

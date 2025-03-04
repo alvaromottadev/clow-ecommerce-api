@@ -4,6 +4,7 @@ import br.com.motta.ecommerce.dto.EmailDTO;
 import br.com.motta.ecommerce.dto.PaymentRequestDTO;
 import br.com.motta.ecommerce.service.EmailService;
 import com.mercadopago.MercadoPagoConfig;
+import com.mercadopago.client.merchantorder.MerchantOrderClient;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
@@ -30,13 +31,11 @@ public class PaymentController {
         MercadoPagoConfig.setAccessToken(accessToken);
 
         PaymentClient client = new PaymentClient();
-        Payment pagamento = client.get(Long.parseLong(payment.id()));
+        Payment pagamento = client.get(Long.parseLong(payment.data().id()));
 
         String email = pagamento.getPayer().getEmail();
 
-        PaymentPayer payer = pagamento.getPayer();
-
-        String bodyEmail = "Olá, " + payer.getFirstName() + "! Sua compra em nossa loja foi aprovada, já estamos preparando com muito carinho!" +
+        String bodyEmail = "Parabéns! Sua compra em nossa loja foi aprovada, já estamos preparando com muito carinho!" +
                 "\n\nID da Compra: " + pagamento.getId() + "\nDescrição da Compra: " + pagamento.getDescription() +
                 "\n\nProdutos";
         service.sendEmail(new EmailDTO(email, "Compra Aprovada - Clow E-Commerce", bodyEmail));

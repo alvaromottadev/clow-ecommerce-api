@@ -64,7 +64,7 @@ public class ClienteService {
 
         String bodyEmail = "Seja bem-vindo a Clow E-Commerce!";
 
-//        emailService.sendEmail(new EmailDTO(cliente.getLogin(), "Cadastro - Clow E-Commerce API", bodyEmail));
+        emailService.sendEmail(new EmailDTO(cliente.getLogin(), "Cadastro - Clow E-Commerce API", bodyEmail));
 
         return ResponseEntity.status(201).body(new ResponseDTO("Cliente cadastrado com sucesso."));
     }

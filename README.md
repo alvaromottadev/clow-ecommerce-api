@@ -1,6 +1,6 @@
 ![Clow 5](https://github.com/user-attachments/assets/17b7c231-0474-4ddc-bf36-2bc2fce14377)
 
-# 🛒 API RESTful - E-Commerce.  
+# 🛒 API RESTful - E-Commerce  
 
 ## 💻 Sobre o Projeto  
 

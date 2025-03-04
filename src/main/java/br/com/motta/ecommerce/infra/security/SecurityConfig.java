@@ -64,6 +64,8 @@ public class SecurityConfig {
                         //Estoque
                         .requestMatchers("/estoque/**").hasRole("ADMIN")
 
+                        .requestMatchers("/payment").permitAll()
+
 
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/context-path/**", "/api-docs").permitAll()  // Permite acesso ao Swagger

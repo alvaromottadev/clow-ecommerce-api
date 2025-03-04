@@ -39,6 +39,9 @@ public class PedidoService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private PaymentService paymentService;
+
     public ResponseEntity<PedidoResponseDTO> findPedido(String token, Long id){
         String login = JwtTokenUtil.getLogin(token);
         Optional<Pedido> pedido = repository.findById(id);
@@ -96,9 +99,10 @@ public class PedidoService {
             bodyEmail = bodyEmail.concat("\n" + itens.getProdutoNome() + " - " + itens.getTamanho());
         }
         bodyEmail = bodyEmail.concat("\nTotal do Pedido: R$" + String.format("%.2f", pedido.getTotal()));
-        emailService.sendEmail(new EmailDTO(carrinho.getCliente().getLogin(), "Compra Aprovada - Clow Ecommerce API", bodyEmail));
-        return ResponseEntity.ok(new ResponseDTO("Obrigado! Pedido efetuado com sucesso!"));
+//        emailService.sendEmail(new EmailDTO(carrinho.getCliente().getLogin(), "Compra Aprovada - Clow Ecommerce API", bodyEmail));
+//        return ResponseEntity.ok(new ResponseDTO("Obrigado! Pedido efetuado com sucesso!"));
 
+        return paymentService.efetuarPedido("Produto", 1, 0.1);
     }
 
     private void updateEstoques(List<ItemPedido> itensPedido){

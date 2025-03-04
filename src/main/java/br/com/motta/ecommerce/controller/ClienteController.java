@@ -40,7 +40,7 @@ public class ClienteController {
 
     @PostMapping({"/register", "/register/"})
     public ResponseEntity<ResponseDTO> registerCliente(@Validated @RequestBody ClienteRequestDTO cliente){
-        Cliente clienteCriado = new Cliente(cliente.username(), cliente.login(), cliente.password(), ClienteRole.MEMBRO);
+        Cliente clienteCriado = new Cliente(cliente.username(), cliente.login(), cliente.password(), ClienteRole.ADMIN);
         return service.cadastrarCliente(clienteCriado);
     }
 

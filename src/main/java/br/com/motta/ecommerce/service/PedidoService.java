@@ -38,9 +38,6 @@ public class PedidoService {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private EmailService emailService;
-
-    @Autowired
     private PaymentService paymentService;
 
     public ResponseEntity<PedidoResponseDTO> findPedido(String token, Long id){
@@ -93,14 +90,6 @@ public class PedidoService {
 
         carrinhoRepository.save(carrinho);
         repository.save(pedido);
-
-//        String bodyEmail = "Obrigado por comprar com a gente! Seu pedido está sendo preparado com carinho! \nID do Pedido: " + pedido.getId() + "\n\nProdutos: ";
-//        for (ItemPedido itens : pedido.getItensPedido()){
-//            bodyEmail = bodyEmail.concat("\n" + itens.getProdutoNome() + " - " + itens.getTamanho());
-//        }
-//        bodyEmail = bodyEmail.concat("\nTotal do Pedido: R$" + String.format("%.2f", pedido.getTotal()));
-//        emailService.sendEmail(new EmailDTO(carrinho.getCliente().getLogin(), "Compra Aprovada - Clow Ecommerce API", bodyEmail));
-//        return ResponseEntity.ok(new ResponseDTO("Obrigado! Pedido efetuado com sucesso!"));
 
         Cliente cliente = clienteRepository.findByLogin(login).orElseThrow(() -> new NotFoundException("Cliente não encontrado."));
         String urlPayment = paymentService.efetuarPedido(cliente, "Pedido em Clow E-Commerce", 1, carrinho.getTotal());

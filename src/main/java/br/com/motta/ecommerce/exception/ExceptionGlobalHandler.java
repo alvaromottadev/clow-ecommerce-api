@@ -57,4 +57,9 @@ public class ExceptionGlobalHandler {
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SignatureInvalidException.class)
+    public ResponseEntity<?> handleSignatureInvalidException(SignatureInvalidException exception){
+        return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 }

@@ -26,9 +26,6 @@ public class PaymentService {
     private String accessToken;
 
     public String efetuarPedido(Cliente cliente, String titulo, Integer quantidade, Double valor) {
-        System.out.println(titulo);
-        System.out.println(quantidade);
-        System.out.println(valor);
         if (titulo == null || quantidade <= 0 || valor <= 0.0) {
             return "Não foi possível efetuar o pedido.";
         }
@@ -52,9 +49,11 @@ public class PaymentService {
                     .failure("https://linkvoltar.com")
                     .build();
 
+
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .backUrls(backUrls)
+                    .externalReference(cliente.getLogin())
                     .build();
 
             PreferenceClient client = new PreferenceClient();

@@ -69,6 +69,6 @@ Fale com Alvaro Motta:
 [![Gmail](https://img.shields.io/badge/Gmail-D14836?logo=gmail&logoColor=white)](mailto:alvaromotta.dev@gmail.com)  [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alvaromottadev/)
 
 ## 📃 LICENÇA
-Distribuído sob a licença MIT. Veja [LICENSE]("https://github.com/alvaromottadev/clow-ecommerce-api/blob/master/LICENSE") para mais informações.
+Distribuído sob a licença MIT. Veja [LICENSE](https://github.com/alvaromottadev/clow-ecommerce-api/blob/master/LICENSE) para mais informações.
 
 **Este projeto foi desenvolvido com fins estudantis.**

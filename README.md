@@ -4,7 +4,7 @@
 
 ## 💻 Sobre o Projeto  
 
-A **Clow E-Commerce API** é uma **API RESTful** projetada para atender as necessidades de um e-commerce voltado ao setor de moda. Com ela, é possível realizar operações essenciais para a gestão de uma loja online, oferecendo flexibilidade e agilidade no gerenciamento de produtos, clientes, pedidos, carrinhos e estoque. Além disso, utilizamos a API do Mercado Pago para integrar um método de pagamento eficiente e seguro.
+A **Clow E-Commerce API** é uma **API RESTful** projetada para atender as necessidades de um e-commerce voltado ao setor de moda. Com ela, é possível realizar operações essenciais para a gestão de uma loja online, oferecendo flexibilidade e agilidade no gerenciamento de produtos, clientes, pedidos, carrinhos e estoque. Além disso, utilizamos a **API do Mercado Pago** para integrar um método de pagamento eficiente e seguro.
 
 ### 🟣 Funcionalidades  
 

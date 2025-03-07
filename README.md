@@ -4,10 +4,7 @@
 
 ## 💻 Sobre o Projeto  
 
-A **Clow E-Commerce API** é uma **API RESTful** projetada para atender as necessidades de um e-commerce voltado ao setor de moda. Com ela, é possível realizar operações essenciais para a gestão de uma loja online, oferecendo flexibilidade e agilidade no gerenciamento de produtos, clientes, pedidos, carrinhos e estoque.
-
-📜 Quer saber mais sobre os endpoints e funcionalidades?  
-👉 Acesse o documento [aqui](https://sassy-ermine-3c7.notion.site/Clow-E-Commerce-API-1a712b6797b38086abf7c78425ed31c2?pvs=73)
+A **Clow E-Commerce API** é uma **API RESTful** projetada para atender as necessidades de um e-commerce voltado ao setor de moda. Com ela, é possível realizar operações essenciais para a gestão de uma loja online, oferecendo flexibilidade e agilidade no gerenciamento de produtos, clientes, pedidos, carrinhos e estoque. Além disso, foi utilizada a **API do Mercado Pago** para integrar um método de pagamento eficiente e seguro.
 
 ### 🟣 Funcionalidades  
 
@@ -16,6 +13,9 @@ A **Clow E-Commerce API** é uma **API RESTful** projetada para atender as neces
 ✅ Sistema de Pedidos  
 ✅ Carrinho de Compras: Adicionar, remover produtos e visualizar o carrinho.  
 ✅ Gestão de Estoque: Adicionar e remover itens do estoque.
+
+📜 Quer saber mais sobre os endpoints e funcionalidades?  
+👉 Acesse o documento [aqui](https://sassy-ermine-3c7.notion.site/Clow-E-Commerce-API-1a712b6797b38086abf7c78425ed31c2?pvs=73)
 
 ## 🛠 Tecnologias Utilizadas  
 
@@ -69,6 +69,6 @@ Fale com Alvaro Motta:
 [![Gmail](https://img.shields.io/badge/Gmail-D14836?logo=gmail&logoColor=white)](mailto:alvaromotta.dev@gmail.com)  [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alvaromottadev/)
 
 ## 📃 LICENÇA
-Distribuído sob a licença MIT. Veja [LICENSE]("https://github.com/alvaromottadev/clow-ecommerce-api/blob/master/LICENSE) para mais informações.
+Distribuído sob a licença MIT. Veja [LICENSE](https://github.com/alvaromottadev/clow-ecommerce-api/blob/master/LICENSE) para mais informações.
 
 **Este projeto foi desenvolvido com fins estudantis.**

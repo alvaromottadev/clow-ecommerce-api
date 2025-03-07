@@ -92,7 +92,7 @@ public class PedidoService {
         repository.save(pedido);
 
         Cliente cliente = clienteRepository.findByLogin(login).orElseThrow(() -> new NotFoundException("Cliente não encontrado."));
-        String urlPayment = paymentService.efetuarPedido(cliente, "Pedido em Clow E-Commerce", 1, carrinho.getTotal());
+        String urlPayment = paymentService.efetuarPedido(cliente, pedido.getId(),"Pedido em Clow E-Commerce", 1, carrinho.getTotal());
         carrinho.setTotal(0.0);
         return ResponseEntity.ok(urlPayment);
     }

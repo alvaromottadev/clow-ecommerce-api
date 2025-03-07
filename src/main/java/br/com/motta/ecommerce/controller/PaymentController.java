@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class PaymentController {
 
@@ -50,11 +48,12 @@ public class PaymentController {
         PaymentClient client = new PaymentClient();
         Payment pagamento = client.get(Long.parseLong(payment.data().id()));
 
-        String login = pagamento.getExternalReference();
+        String login = pagamento.getExternalReference().split(",")[0];
+        String pedidoId = pagamento.getExternalReference().split(",")[1];
         Cliente cliente = clienteRepository.findByLogin(login).orElseThrow(() -> new NotFoundException("Cliente não encontrado."));;
 
         String bodyEmail = "Olá, " + cliente.getUsername() + "! Sua compra em nossa loja foi aprovada, já estamos preparando com muito carinho!" +
-                "\n\nID da Compra: " + pagamento.getId() + "\nDescrição da Compra: " + pagamento.getDescription();
+                "\n\nID da Compra: " + pagamento.getId() + "\nID do Pedido: " + pedidoId + "\nDescrição da Compra: " + pagamento.getDescription();
 
         service.sendEmail(new EmailDTO(login, "Compra Aprovada - Clow E-Commerce", bodyEmail));
 

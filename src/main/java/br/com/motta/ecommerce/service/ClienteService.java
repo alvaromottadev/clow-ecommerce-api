@@ -42,6 +42,7 @@ public class ClienteService {
     public ResponseEntity<ClienteResponseDTO> getPerfil(String token){
         String login = JwtTokenUtil.getLogin(token);
         Cliente cliente = repository.findByLogin(login).orElseThrow(() -> new NotFoundException("Cliente não encontrado."));
+        System.out.println(cliente.getUsername());
         return ResponseEntity.ok(new ClienteResponseDTO(cliente));
     }
 

@@ -2,6 +2,7 @@ package br.com.motta.ecommerce.service;
 
 import br.com.motta.ecommerce.dto.ResponseDTO;
 import br.com.motta.ecommerce.model.Cliente;
+import br.com.motta.ecommerce.model.Pedido;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.common.AddressRequest;
 import com.mercadopago.client.payment.PaymentClient;
@@ -25,7 +26,7 @@ public class PaymentService {
     @Value("${access-token}")
     private String accessToken;
 
-    public String efetuarPedido(Cliente cliente, String titulo, Integer quantidade, Double valor) {
+    public String efetuarPedido(Cliente cliente, Long pedidoId, String titulo, Integer quantidade, Double valor) {
         if (titulo == null || quantidade <= 0 || valor <= 0.0) {
             return "Não foi possível efetuar o pedido.";
         }
@@ -53,7 +54,7 @@ public class PaymentService {
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .backUrls(backUrls)
-                    .externalReference(cliente.getLogin())
+                    .externalReference(cliente.getLogin() + "," + pedidoId)
                     .build();
 
             PreferenceClient client = new PreferenceClient();

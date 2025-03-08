@@ -19,8 +19,6 @@ public class ProdutoController {
     @Autowired
     private ProdutoService service;
 
-
-    @CrossOrigin(origins = "*")
     @GetMapping("/get-all")
     public ResponseEntity<List<ProdutoResponseDTO>> getAllProdutos() {
         return service.getAllProdutos();

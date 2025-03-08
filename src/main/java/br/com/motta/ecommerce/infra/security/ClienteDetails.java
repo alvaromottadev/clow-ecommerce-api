@@ -1,6 +1,7 @@
 package br.com.motta.ecommerce.infra.security;
 
 import br.com.motta.ecommerce.model.Cliente;
+import org.springframework.security.config.annotation.web.headers.HeadersSecurityMarker;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

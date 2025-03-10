@@ -31,44 +31,35 @@ public class SecurityConfig {
                         .requestMatchers("/cliente/get/**").hasRole("ADMIN")
                         .requestMatchers("/cliente/get-all").hasRole("ADMIN")
 
-                        //POST
                         .requestMatchers("/cliente/register").permitAll()
                         .requestMatchers("/cliente/register/").permitAll()
 
-                        //UPDATE
                         .requestMatchers("/cliente/atualizar").authenticated()
                         .requestMatchers("/cliente/atualizar/**").hasRole("ADMIN")
 
-                        //Corrigir
                         .requestMatchers("/cliente/deletar").authenticated()
                         .requestMatchers("/cliente/deletar/**").hasRole("ADMIN")
 
-                        //Produto
                         .requestMatchers("/produto/deletar/**").hasRole("ADMIN")
                         .requestMatchers("/produto/get-all").permitAll()
                         .requestMatchers("/produto/cadastrar").hasRole("ADMIN")
                         .requestMatchers("/produto/atualizar/**").hasRole("ADMIN")
 
-                        //Carrinho
                         .requestMatchers("/carrinho/adicionar/**").permitAll()
                         .requestMatchers("/carrinho/remover/**").permitAll()
                         .requestMatchers("/carrinho/deletar/**").permitAll()
                         .requestMatchers("/carrinho/get").permitAll()
                         .requestMatchers("/carrinho/get/**").hasRole("ADMIN")
 
-                        //Pedido
                         .requestMatchers("/pedido/efetuar-pedido").authenticated()
-                        .requestMatchers("/pedido/get/**").authenticated() // --> Corrigir ADMIN visualizar
+                        .requestMatchers("/pedido/get/**").authenticated()
                         .requestMatchers("/pedido/get-all/**").hasRole("ADMIN")
 
-                        //Estoque
                         .requestMatchers("/estoque/**").hasRole("ADMIN")
 
                         .requestMatchers("/payment").permitAll()
 
-
                         .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/context-path/**", "/api-docs").permitAll()  // Permite acesso ao Swagger
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

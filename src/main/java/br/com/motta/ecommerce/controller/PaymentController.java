@@ -38,7 +38,7 @@ public class PaymentController {
     private String secretSignature;
 
     @PostMapping("/payment")
-    public ResponseEntity<?> payment(@RequestHeader("x-signature") String secretSignatureRequest, @RequestBody PaymentRequestDTO payment) throws MPException, MPApiException {
+    public ResponseEntity<?> payment(@RequestBody PaymentRequestDTO payment) throws MPException, MPApiException {
 
 //        if (!secretSignature.equals(secretSignatureRequest)){
 //            throw new SignatureInvalidException("Não foi permitido o acesso nesse endpoint.");

@@ -11,8 +11,8 @@ A **Clow E-Commerce API** é uma **API RESTful** projetada para atender as neces
 ✅ CRUD de Clientes: Cadastro, atualização, consulta e remoção de clientes.  
 ✅ CRUD de Produtos: Cadastro, atualização, listagem e exclusão de produtos.  
 ✅ Carrinho de Compras: Adicionar, remover produtos e visualizar o carrinho.  
-✅ Sistema de Pedidos. 
-✅ Gestão de Estoque: Adicionar, remover e visualizar quantidade do estoque.  
+✅ Sistema de Pedidos.  
+✅ Gestão de Estoque: Adicionar, remover e visualizar quantidade do estoque.
 
 📜 Quer saber mais sobre os endpoints e funcionalidades?  
 👉 Acesse o documento [aqui](https://sassy-ermine-3c7.notion.site/Clow-E-Commerce-API-1a712b6797b38086abf7c78425ed31c2?pvs=73)
